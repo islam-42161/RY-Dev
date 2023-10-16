@@ -29,14 +29,15 @@ export default function App() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      primary: customColors.primary,
-      accent: customColors.secondary,
-      background: customColors.background,
-      text: customColors.textPrimary,
-      error: customColors.error,
-      success: customColors.success,
-      warning: customColors.warning,
-      info: customColors.info,
+      // primary: customColors.primary,
+      // accent: customColors.secondary,
+      // background: customColors.background,
+      // text: customColors.textPrimary,
+      // error: customColors.error,
+      // success: customColors.success,
+      // warning: customColors.warning,
+      // info: customColors.info,
+      ...customColors,
     },
   }
   return (
