@@ -5,9 +5,8 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
-  StatusBar,
   ScrollView,
-  Pressable,
+  StatusBar
 } from "react-native";
 import {
   TextInput,
@@ -18,10 +17,47 @@ import {
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { SelectCountry } from "react-native-element-dropdown";
+const local_data = [
+  {
+    value: '1',
+    lable: 'Country 1',
+    image: {
+      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
+    },
+  },
+  {
+    value: '2',
+    lable: 'Country 2',
+    image: {
+      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
+    },
+  },
+  {
+    value: '3',
+    lable: 'Country 3',
+    image: {
+      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
+    },
+  },
+  {
+    value: '4',
+    lable: 'Country 4',
+    image: {
+      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
+    },
+  },
+  {
+    value: '5',
+    lable: 'Country 5',
+    image: {
+      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
+    },
+  },
+];
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 const genders = ['Male', 'Female', 'Other'];
-const Register = () => {
+const Register = ({navigation}) => {
   const [email, setEmail] = useState(null);
   const [f_name, setFName] = useState(null);
   const [password, setPassword] = useState(null);
@@ -33,6 +69,10 @@ const Register = () => {
  
   const [date, setDate] = useState(new Date(null));
   const [show, setShow] = useState(false);
+
+
+
+  const [country,setCountry] = useState('1')
 
 
   const months = [
@@ -80,6 +120,8 @@ const Register = () => {
       <ScrollView
         style={[styles.container, { backgroundColor: theme.colors.background }]}
       >
+          <StatusBar translucent backgroundColor={'transparent'} barStyle={'dark-content'}/>
+
         {/* header */}
         <View style={styles.header}>
           <View style={styles.headerImage}>
@@ -169,12 +211,12 @@ const Register = () => {
           </HelperText>):null}
 <Divider/>
 
-          <View style={styles.dobgender}>
+          <View style={styles.row}>
           <Title style={theme.fonts.labelLarge}>Date of Birth</Title>
 
           <Button
         icon='calendar'
-        mode="outlined"
+        // mode="outlined"
         onPress={showDatepicker}
       >{date.getDate()}-{months[date.getMonth()]}-{date.getFullYear()}
       </Button>
@@ -188,14 +230,14 @@ const Register = () => {
         />
       )}
       </View>
-      <View style={styles.dobgender}>
+      <View style={styles.row}>
       <Title style={theme.fonts.labelLarge}>Select your gender</Title>
         <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
         anchor={
           <Button
-          mode="outlined"
+          // mode="outlined"
             style={{ color: selectedGender ? 'black' : 'gray'}}
             onPress={openMenu}
             icon='chevron-down'>{selectedGender || 'Select Gender'}</Button>
@@ -218,7 +260,29 @@ const Register = () => {
    </Menu>
 </View>
 <Divider/>
-<Title style={theme.fonts.labelLarge}>Where do you live?</Title>
+<Title style={theme.fonts.titleMedium}>Where do you live?</Title>
+<View style={styles.row}>
+<Title style={theme.fonts.labelMedium}>Country</Title>
+<SelectCountry
+style={styles.dropdown}
+        selectedTextStyle={styles.selectedTextStyle}
+        placeholderStyle={styles.placeholderStyle}
+        imageStyle={styles.imageStyle}
+        iconStyle={styles.iconStyle}
+maxHeight={200}
+        value={country}
+        search
+        data={local_data}
+        valueField="value"
+        labelField="lable"
+        imageField="image"
+        placeholder="Select country"
+        searchPlaceholder="Search..."
+        onChange={e => {
+          setCountry(e.value);
+        }}
+/>
+</View>
         </View>
       </ScrollView>
     </TouchableWithoutFeedback>
@@ -253,11 +317,35 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     gap: 10,
   },
-  dobgender:{
+  row:{
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between',
     // borderWidth:1,
     borderRadius:5,paddingHorizontal:15,paddingVertical:5
-  }
+  },
+  dropdown: {
+    // margin: 16,
+    // height: 50,
+    width: 150,
+    // borderRadius: 22,
+    // borderWidth:0.5,
+    // paddingHorizontal: 8,
+  },
+  imageStyle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+  placeholderStyle: {
+    fontSize: 12,
+  },
+  selectedTextStyle: {
+    fontSize: 12,
+    marginLeft: 8,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
 });

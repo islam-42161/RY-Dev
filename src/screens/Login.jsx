@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  StatusBar,
   Pressable,
 } from "react-native";
 import {
@@ -17,7 +18,7 @@ import {
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
@@ -40,6 +41,7 @@ const Login = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+    <StatusBar translucent backgroundColor={'transparent'} barStyle={'light-content'}/>
         <View style={styles.top}>
         <Image
           source={require("../../assets/icon.png")}
@@ -119,7 +121,7 @@ const Login = () => {
             style={{ alignSelf: "center", marginVertical: 10 }}
           >
             Don't have an account?{" "}
-            <Text variant="labelMedium" style={{ color: theme.colors.primary }}>
+            <Text onPress={()=>navigation.navigate('register')} variant="labelMedium" style={{ color: theme.colors.primary }}>
               Sign Up
             </Text>
           </Text>

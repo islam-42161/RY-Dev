@@ -26,7 +26,7 @@ export default function App() {
   
   
   const theme = {
-    ...DefaultTheme,
+  ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
       // primary: customColors.primary,
