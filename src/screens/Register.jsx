@@ -13,52 +13,54 @@ import {
   useTheme,
   Title,
   HelperText,
-  Menu,Text, Card, Divider, List, Button, Surface, RadioButton, IconButton
+  Menu,Text, Card, Divider, List, Button, Surface, RadioButton, IconButton, FAB, AnimatedFAB
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { SelectCountry } from "react-native-element-dropdown";
+import { Dropdown, SelectCountry } from "react-native-element-dropdown";
 const local_data = [
   {
-    value: '1',
-    lable: 'Country 1',
+    
+    value: 'Bangladesh',
     image: {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
     },
   },
   {
-    value: '2',
-    lable: 'Country 2',
+    value: 'Bangladesh',
     image: {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
     },
   },
   {
-    value: '3',
-    lable: 'Country 3',
+    value: 'Bangladesh',
     image: {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
     },
   },
   {
-    value: '4',
-    lable: 'Country 4',
+    value: 'Bangladesh',
     image: {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
     },
   },
   {
-    value: '5',
-    lable: 'Country 5',
+    value: 'Bangladesh',
     image: {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/800px-Flag_of_Bangladesh.svg.png',
     },
   },
 ];
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
-const genders = ['Male', 'Female', 'Other'];
+const genders = [
+  {label:'Male',value:'Male'},
+  {label:'Female',value:'Female'},
+  {label:'Other',value:'Other'},
+];
+
 const Register = ({navigation}) => {
   const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
   const [f_name, setFName] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirm_password, setConfirmPassoword] = useState(null);
@@ -72,7 +74,11 @@ const Register = ({navigation}) => {
 
 
 
-  const [country,setCountry] = useState('1')
+  const [country,setCountry] = useState(null)
+  const [city,setCity] = useState(null)
+
+  const [fabExtended,setFabExtended] = useState(true)
+  const [fabVisible,setFabVisible] = useState(true)
 
 
   const months = [
@@ -114,13 +120,25 @@ const Register = ({navigation}) => {
     setMenuVisible(false);
   };
   const theme = useTheme();
+
+
+  const onScroll = ({ nativeEvent }) => {
+    const currentScrollPosition =
+      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+    setFabExtended(currentScrollPosition <= 0);
+  };
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView
+    <View
         style={[styles.container, { backgroundColor: theme.colors.background }]}
-      >
+
+    >
           <StatusBar translucent backgroundColor={'transparent'} barStyle={'dark-content'}/>
+      <ScrollView
+      onScroll={onScroll}
+      >
 
         {/* header */}
         <View style={styles.header}>
@@ -155,19 +173,8 @@ const Register = ({navigation}) => {
 
         {/* body */}
         <View style={styles.body}>
-          <Title style={[theme.fonts.titleMedium, { fontWeight: "bold" }]}>
-            Register
-          </Title>
-          <TextInput
-            label="Full Name"
-            placeholder="Captain America"
-            value={f_name}
-            onChangeText={(text) => setFName(text)}
-            mode="outlined"
-            right={<TextInput.Icon icon="pencil" />}
-            style={styles.input}
-            returnKeyType="go"
-          />
+          <View style={styles.row}>
+
           <TextInput
             label="Email"
             placeholder="xyz@xyz.com"
@@ -179,6 +186,19 @@ const Register = ({navigation}) => {
             style={styles.input}
             returnKeyType="go"
           />
+          <Title style={theme.fonts.labelMedium}>Or</Title>
+          <TextInput
+            label="Phone"
+            placeholder="+8801234567899"
+            value={phone}
+            onChangeText={(text) =>setPhone(text)}
+            mode="outlined"
+            right={<TextInput.Icon icon="phone" />}
+            keyboardType="phone-pad"
+            style={styles.input}
+            returnKeyType="go"
+          />
+          </View>
           <TextInput
             label="Password"
             value={password}
@@ -210,7 +230,16 @@ const Register = ({navigation}) => {
             {errorText}
           </HelperText>):null}
 <Divider/>
-
+<TextInput
+            label="Full Name"
+            placeholder="Captain America"
+            value={f_name}
+            onChangeText={(text) => setFName(text)}
+            mode="outlined"
+            right={<TextInput.Icon icon="pencil" />}
+            style={styles.input}
+            returnKeyType="go"
+          />
           <View style={styles.row}>
           <Title style={theme.fonts.labelLarge}>Date of Birth</Title>
 
@@ -218,6 +247,7 @@ const Register = ({navigation}) => {
         icon='calendar'
         // mode="outlined"
         onPress={showDatepicker}
+        textColor={'#000000b5'}
       >{date.getDate()}-{months[date.getMonth()]}-{date.getFullYear()}
       </Button>
           {show && (
@@ -231,60 +261,112 @@ const Register = ({navigation}) => {
       )}
       </View>
       <View style={styles.row}>
-      <Title style={theme.fonts.labelLarge}>Select your gender</Title>
-        <Menu
-        visible={menuVisible}
-        onDismiss={closeMenu}
-        anchor={
-          <Button
-          // mode="outlined"
-            style={{ color: selectedGender ? 'black' : 'gray'}}
-            onPress={openMenu}
-            icon='chevron-down'>{selectedGender || 'Select Gender'}</Button>
+      <Title style={theme.fonts.labelLarge}>Gender</Title>
+        
 
-        }>
-      
+   <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={genders}
+        // search
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder="Male or Female"
+        // searchPlaceholder="Search..."
+        value={selectedGender}
+        onChange={item => {
+          setSelectedGender(item.value);
+        }}
+        // renderLeftIcon={() => (
+        //   <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
+        // )}
+      />
 
-            <RadioButton.Group
-              onValueChange={(value) => {
-                setSelectedGender(value);
-                closeMenu();
-              }}
-              value={selectedGender}
-            >
-            {genders.map((value,index)=>(
-
-              <RadioButton.Item key={index} label={value} value={value} />
-            ))}
-            </RadioButton.Group>
-   </Menu>
 </View>
 <Divider/>
 <Title style={theme.fonts.titleMedium}>Where do you live?</Title>
 <View style={styles.row}>
-<Title style={theme.fonts.labelMedium}>Country</Title>
-<SelectCountry
+<Dropdown
 style={styles.dropdown}
         selectedTextStyle={styles.selectedTextStyle}
         placeholderStyle={styles.placeholderStyle}
         imageStyle={styles.imageStyle}
         iconStyle={styles.iconStyle}
-maxHeight={200}
+maxHeight={500}
         value={country}
         search
         data={local_data}
         valueField="value"
-        labelField="lable"
-        imageField="image"
-        placeholder="Select country"
-        searchPlaceholder="Search..."
+        labelField="value"
+        // imageField="image"
+        placeholder="Bangladesh"
+        searchPlaceholder="Bangladesh"
+        onChange={e => {
+          setCountry(e.value);
+        }}
+/>
+
+<Dropdown
+        style={styles.dropdown}
+        selectedTextStyle={styles.selectedTextStyle}
+        placeholderStyle={styles.placeholderStyle}
+        imageStyle={styles.imageStyle}
+        iconStyle={styles.iconStyle}
+        maxHeight={500}
+        value={country}
+        search
+        data={local_data}
+        valueField="value"
+        labelField="value"
+        // imageField="image"
+        placeholder="Khilgaon, Dhaka"
+        searchPlaceholder="Khilgaon, Dhaka"
         onChange={e => {
           setCountry(e.value);
         }}
 />
 </View>
+<TextInput
+            label="Address Line 1"
+            // value={}
+            // onChangeText={(text) => setPassword(text)}
+            mode="outlined"
+            right={<TextInput.Icon icon="google-maps" />}
+            style={styles.input}
+            placeholder="Wing A, Block 2, XYZ, Fifth road - Dhaka"
+            returnKeyType="go"
+          />
+<TextInput
+            label="Address Line 2 (Optional)"
+            // value={}
+            // onChangeText={(text) => setPassword(text)}
+            mode="outlined"
+            right={<TextInput.Icon icon="google-maps" />}
+            style={styles.input}
+            placeholder="XYZ, Fifth road - Dhaka"
+            returnKeyType="go"
+            disabled
+          />
         </View>
+        
       </ScrollView>
+      <AnimatedFAB
+        icon={'arrow-right'}
+        label={'Register'}
+        extended={fabExtended}
+        onPress={() => console.log('Pressed')}
+        visible={fabVisible}
+        animateFrom={'right'}
+        variant="primary"
+        // iconMode={'static'}
+        style={[styles.fabStyle,{backgroundColor:theme.colors.primary}]}
+        color={theme.colors.inverseOnSurface}
+      />
+      </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -294,8 +376,8 @@ export default Register;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: STATUSBAR_HEIGHT * 1.5,
-    padding: 20,
+    paddingTop: STATUSBAR_HEIGHT+16,
+    padding: 16,
   },
   header: {
     flexDirection: "row",
@@ -317,12 +399,18 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     gap: 10,
   },
+  input:{
+    flex:1
+  },
   row:{
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between',
+    gap:10
     // borderWidth:1,
-    borderRadius:5,paddingHorizontal:15,paddingVertical:5
+    // borderRadius:5,
+    // paddingHorizontal:15,
+    // paddingVertical:5
   },
   dropdown: {
     // margin: 16,
@@ -347,5 +435,10 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 20,
     height: 20,
+  },
+  fabStyle: {
+    bottom: 16,
+    right: 16,
+    position: 'absolute',
   },
 });
