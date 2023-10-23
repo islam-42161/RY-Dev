@@ -49,6 +49,7 @@ const Login = ({navigation}) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     
       <ScrollView
+      showsVerticalScrollIndicator={false}
 
       style={[styles.container,{backgroundColor:theme.colors.background}]}>
     <StatusBar translucent backgroundColor={'transparent'} barStyle={'light-content'}/>
