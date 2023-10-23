@@ -183,7 +183,7 @@ height:height
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    marginVertical: 10,
+    marginVertical: 15,
   },
   divider: {
     // height:StyleSheet.hairlineWidth,
