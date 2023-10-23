@@ -4,19 +4,39 @@ import AppRoot from './src/AppRoot';
 import { MD3LightTheme as DefaultTheme,PaperProvider } from 'react-native-paper';
 
 const customColors = {
-  primary: '#197b45',
-  primaryDark: '#71a586',
-  primaryLight: '#e8f6ee',
-  secondary: '#468460',
-  secondaryDark: '#3ca46c',
-  secondaryLight: '#7bc498',
-  background: 'white',
-  textPrimary: '#8ad3ad',
-  textSecondary: '#54a27c',
-  error: '#FF5722',
-  success: '#4CAF50',
-  warning: '#FF9800',
-  info: '#03A9F4',
+  //primary
+  primary: '#006d39',
+  onPrimary:'#ffffff',
+  primaryContainer:'#9af6b4',
+  onPrimaryContainer:'#9af6b4',
+  
+  // secondary
+  secondary: '#006d42',
+  onSecondary:'#ffffff',
+  secondaryContainer:'#93f7bb',
+  onSecondaryContainer:'#002111',
+
+  //tertiary
+  tertiary:'#3a646f',
+  onTertiary:'#ffffff',
+  tertiaryContainer:'#beeaf6',
+  onTertiaryContainer:'#001f26',
+
+  //error
+  error:'#ba1a1a',
+  onError:'#ffffff',
+  errorContainer:'#ffdad6',
+  onErrorContainer:'#410002',
+
+  //background
+  background: '#fbfdf7',
+  onBackground: '#191c19',
+  surface: '#fbfdf7',
+  onSurface: '#191c19',
+
+  outline:'#717971',
+  surfaceVariant:'#dde5db',
+  onSurfaceVariant:'#414941',
 };
 
 

@@ -7,6 +7,9 @@ import {
   Keyboard,
   StatusBar,
   Pressable,
+  ScrollView,
+  Dimensions,
+  Platform,
 } from "react-native";
 import {
   TextInput,
@@ -17,6 +20,10 @@ import {
   Divider,
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
+
+
+const {height,width} = Dimensions.get('screen')
+
 
 const Login = ({navigation}) => {
   const [phone, setPhone] = useState("");
@@ -40,8 +47,13 @@ const Login = ({navigation}) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+    
+      <ScrollView
+
+      style={[styles.container,{backgroundColor:theme.colors.background}]}>
     <StatusBar translucent backgroundColor={'transparent'} barStyle={'light-content'}/>
+    {/* { isKeyboardVisible ? null : ( */}
+        
         <View style={styles.top}>
         <Image
           source={require("../../assets/icon.png")}
@@ -51,12 +63,12 @@ const Login = ({navigation}) => {
         />
 
         </View>
-
+    {/* )} */}
         {/* bottom view */}
         <View
           style={[styles.bottom, { backgroundColor: theme.colors.background }]}
         >
-        { isKeyboardVisible ? null : (
+        {/* { isKeyboardVisible ? null : ( */}
           <View style={styles.loginextrasection}>
             <Button
               mode="outlined"
@@ -74,12 +86,23 @@ const Login = ({navigation}) => {
             >
               Login with Facebook
             </Button>
+            <Button
+              mode="outlined"
+              onPress={handleFacebookLogin}
+              style={styles.button}
+              icon="twitter"
+            >
+              Login with Twitter
+            </Button>
+          </View>
+        {/* ) } */}
+        {/* { isKeyboardVisible ? null : ( */}
+
             <View style={styles.dividerContainer}>
               <Divider style={styles.divider} />
-              <Text style={styles.text}>Or</Text>
+              <Text style={[styles.text,{backgroundColor:theme.colors.background}]}>Or</Text>
             </View>
-          </View>
-        ) }
+            {/* )} */}
 
           <TextInput
             label="Phone"
@@ -87,7 +110,7 @@ const Login = ({navigation}) => {
             onChangeText={(text) => setPhone(text)}
             mode="outlined"
             returnKeyType="next"
-            right={<TextInput.Icon icon="phone" />}
+            // right={<TextInput.Icon icon="phone" />}
             style={styles.input}
             keyboardType="phone-pad"
           />
@@ -97,7 +120,7 @@ const Login = ({navigation}) => {
             onChangeText={(text) => setPassword(text)}
             secureTextEntry
             mode="outlined"
-            right={<TextInput.Icon icon="lock" />}
+            // right={<TextInput.Icon icon="lock" />}
             style={styles.input}
             returnKeyType="go"
           />
@@ -126,7 +149,7 @@ const Login = ({navigation}) => {
             </Text>
           </Text>
         </View>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
@@ -135,13 +158,16 @@ export default Login;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+height:height
   },
   top: {
-    flex: 0.4,
+    height:height*0.4,
+    // flex: 0.4,
   },
   bottom: {
-    flex: 0.6,
+    height: height*0.6,
+    // flex: 0.6,
     gap: 10,
     padding: 40,
     justifyContent: "space-evenly",
@@ -169,7 +195,7 @@ const styles = StyleSheet.create({
   },
   text: {
     position: "absolute",
-    backgroundColor: "white", // Set background color as needed
+    // backgroundColor: "white", // Set background color as needed
     paddingHorizontal: 10,
     top: "50%", // Center the text vertically
     transform: [{ translateY: -10 }], // Adjust translateY to vertically center the text
