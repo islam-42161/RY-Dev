@@ -13,12 +13,12 @@ const RootStackNavigator = () => {
 
   return (
     <NavigationContainer>
-<Navigator initialRouteName='loginemail' screenOptions={{
+<Navigator initialRouteName='loginphone' screenOptions={{
     header:()=>null
 }}>
+    <Screen name='loginphone' component={LoginPhone}/>
     <Screen name='loginemail' component={LoginEmail}/>
     <Screen name='register' component={Register}/>
-    <Screen name='loginphone' component={LoginPhone}/>
 </Navigator>
     </NavigationContainer>
   )

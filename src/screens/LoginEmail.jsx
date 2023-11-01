@@ -18,6 +18,8 @@ import {
   useTheme,
   Checkbox,
   Divider,
+  IconButton,
+  Card,
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
 
@@ -90,32 +92,32 @@ const LoginEmail = ({ navigation }) => {
         {/* bottom view */}
         <View style={[styles.bottom]}>
           {/* { isKeyboardVisible ? null : ( */}
+          <Card mode="contained">
+          
+          <Card.Content>
+          
           <View style={styles.loginextrasection}>
-            <Button
+            <IconButton
               mode="outlined"
               onPress={handleGoogleLogin}
               style={styles.button}
               icon="google"
-            >
-              Login with Google
-            </Button>
-            <Button
+            />
+            <IconButton
               mode="outlined"
               onPress={handleFacebookLogin}
               style={styles.button}
               icon="facebook"
-            >
-              Login with Facebook
-            </Button>
-            <Button
+            />
+            <IconButton
               mode="outlined"
               onPress={handleFacebookLogin}
               style={styles.button}
               icon="twitter"
-            >
-              Login with Twitter
-            </Button>
+            />
           </View>
+          </Card.Content>
+          </Card>
           {/* ) } */}
           {/* { isKeyboardVisible ? null : ( */}
 
@@ -164,6 +166,7 @@ const LoginEmail = ({ navigation }) => {
               </Pressable>
               <Text variant="labelMedium">Forgot Password?</Text>
             </View>
+
             <Button mode="contained" onPress={handleLogin} style={styles.input}>
               Log In
             </Button>
@@ -213,27 +216,20 @@ export default LoginEmail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // height:height
   },
   top: {
-    // height:height*0.4,
-    // overflow:'hidden'
-    flex: 0.4,
+    flexGrow: 1,
   },
   bottom: {
-    // height: height*0.5,
-    flex: 0.6,
-    // flex: 1,
     gap: 10,
-    paddingTop: 20,
-    paddingBottom: 20,
     padding: 40,
-    justifyContent: "flex-start",
+    justifyContent: "center",
   },
   loginextra: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
+    marginVertical:5
   },
   rememberme: { gap: 5, flexDirection: "row", alignItems: "center" },
   dividerContainer: {
@@ -249,7 +245,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'lightgray'
   },
   input: {
-    marginBottom: 5,
+    marginVertical: 5,
   },
   text: {
     position: "absolute",
@@ -262,6 +258,9 @@ const styles = StyleSheet.create({
   forgotpass: {},
   loginextrasection: {
     gap: 10,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center'
   },
   row: {
     flexDirection: "row",

@@ -18,6 +18,7 @@ import {
   useTheme,
   Checkbox,
   Divider,
+  Card,
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
 
@@ -33,7 +34,7 @@ client
 
 const result = avatars.getBrowser("aa");
 
-console.log(result); // Resource URL
+// console.log(result); // Resource URL
 
 const { height, width } = Dimensions.get("screen");
 
@@ -88,6 +89,7 @@ const LoginPhone = ({ navigation }) => {
         {/* bottom view */}
         <View style={[styles.bottom]}>
           {/* { isKeyboardVisible ? null : ( */}
+
           <View style={styles.loginextrasection}>
             <Button
               mode="outlined"
@@ -129,52 +131,33 @@ const LoginPhone = ({ navigation }) => {
             </Text>
           </View>
           {/* )} */}
-          <View style={styles.logincreds}>
-            <TextInput
-              label="Phone"
-              value={phone}
-              onChangeText={(text) => setPhone(text)}
-              mode="outlined"
-              returnKeyType="next"
-              // right={<TextInput.Icon icon="phone" />}
-              style={styles.input}
-              keyboardType="email-address"
-            />
-           
-            {/* <View style={styles.loginextra}>
-              <Pressable
-                style={styles.rememberme}
-                onPress={() => {
-                  setChecked(!checked);
-                }}
-              >
-                <Checkbox status={checked ? "checked" : "unchecked"} />
-                <Text variant="labelMedium">Remember Me</Text>
-              </Pressable>
-              <Text variant="labelMedium">Forgot Password?</Text>
-            </View> */}
-            <Button mode="contained" onPress={handleLogin} style={styles.input}>
-              Log In
-            </Button>
-          </View>
+          <TextInput
+            label="Phone"
+            value={phone}
+            onChangeText={(text) => setPhone(text)}
+            mode="outlined"
+            returnKeyType="next"
+            // right={<TextInput.Icon icon="phone" />}
+            style={styles.input}
+            keyboardType="email-address"
+          />
 
-          <View style={styles.row}>
-          <View>
-              <Text
-                variant="labelMedium"
-                // style={{ alignSelf: "center"}}
-              >
-                Continue With
-              </Text>
-              <Text
-                onPress={() => navigation.navigate("register")}
-                variant="labelMedium"
-                style={{ color: theme.colors.primary, alignSelf: "flex-start" }}
-              >
-                Phone
-              </Text>
-            </View>
-          </View>
+          <Button icon={"arrow-right"} mode="contained" onPress={handleLogin}>
+            Continue
+          </Button>
+
+          <Text onPress={() => navigation.navigate("loginemail")}
+          variant="labelMedium" style={{ alignSelf: "center" }}>
+            Sign in using{" "}
+            <Text
+              
+              variant="labelMedium"
+              style={{ color: theme.colors.primary, alignSelf: "flex-start" }}
+            >
+              email address
+            </Text>
+          </Text>
+          {/* <Button onPress={() => navigation.navigate("loginemail")} mode="text">Sign in with email address</Button> */}
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -189,41 +172,25 @@ const styles = StyleSheet.create({
     // height:height
   },
   top: {
-    // height:height*0.4,
-    // overflow:'hidden'
-    flex: 0.4,
+    flexGrow: 1,
   },
   bottom: {
-    // height: height*0.5,
-    flex: 0.6,
-    // flex: 1,
-    gap: 10,
-    paddingTop: 20,
-    paddingBottom: 20,
+    gap: 20,
     padding: 40,
-    justifyContent: "flex-start",
-  },
-  loginextra: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: "center",
   },
   rememberme: { gap: 5, flexDirection: "row", alignItems: "center" },
   dividerContainer: {
-    // flex: 1,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    marginVertical: 10,
   },
   divider: {
     // height:StyleSheet.hairlineWidth,
     flex: 1,
     // backgroundColor:'lightgray'
   },
-  input: {
-    marginBottom: 5,
-  },
+  input: {},
   text: {
     position: "absolute",
     // backgroundColor: "white", // Set background color as needed

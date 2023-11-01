@@ -260,7 +260,6 @@ const Register = ({ navigation }) => {
             <Divider />
             <TextInput
               label="Full Name"
-              placeholder="Captain America"
               value={f_name}
               onChangeText={(text) => setFName(text)}
               mode="outlined"
@@ -424,6 +423,7 @@ const styles = StyleSheet.create({
   body: {
     marginVertical: 10,
     gap: 10,
+    // paddingHorizontal:16
   },
   input: {
     flex: 1,
