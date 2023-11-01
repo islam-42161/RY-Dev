@@ -152,7 +152,7 @@ const Register = ({ navigation }) => {
           backgroundColor={"transparent"}
           barStyle={"dark-content"}
         />
-        <ScrollView onScroll={onScroll}>
+        <ScrollView onScroll={onScroll} showsVerticalScrollIndicator={false}>
           {/* header */}
           <View style={styles.header}>
             <View style={styles.headerImage}>
@@ -193,7 +193,7 @@ const Register = ({ navigation }) => {
                 size={20}
                 onPress={() => console.log("Pressed")}
                 mode="outlined"
-              >Continue With Google</Button>
+              >Continue With Google </Button>
               <Button
                 icon="facebook"
                 iconColor={theme.colors.primary}
@@ -214,11 +214,8 @@ const Register = ({ navigation }) => {
 
 <View style={styles.dividerContainer}>
               <Divider style={styles.divider} />
-              <Text style={[styles.text,{backgroundColor:theme.colors.background}]}>Or</Text>
+              <Text style={[styles.text,{backgroundColor:theme.colors.background}]}>Or, register using</Text>
             </View>
-           
-
-            <View style={styles.row}>
               <TextInput
                 label="Email"
                 placeholder="xyz@xyz.com"
@@ -230,19 +227,6 @@ const Register = ({ navigation }) => {
                 style={styles.input}
                 returnKeyType="go"
               />
-              <Title style={theme.fonts.labelMedium}>Or</Title>
-              <TextInput
-                label="Phone"
-                placeholder="+8801234567899"
-                value={phone}
-                onChangeText={(text) => setPhone(text)}
-                mode="outlined"
-                // right={<TextInput.Icon icon="phone" />}
-                keyboardType="phone-pad"
-                style={styles.input}
-                returnKeyType="go"
-              />
-            </View>
             <TextInput
               label="Password"
               value={password}
@@ -272,6 +256,7 @@ const Register = ({ navigation }) => {
             {Boolean(errorText) ? (
               <HelperText type="error">{errorText}</HelperText>
             ) : null}
+
             <Divider />
             <TextInput
               label="Full Name"
