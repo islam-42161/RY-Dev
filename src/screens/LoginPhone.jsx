@@ -139,7 +139,7 @@ const LoginPhone = ({ navigation }) => {
             returnKeyType="next"
             // right={<TextInput.Icon icon="phone" />}
             style={styles.input}
-            keyboardType="email-address"
+            keyboardType="phone-pad"
           />
 
           <Button icon={"arrow-right"} mode="contained" onPress={handleLogin}>
