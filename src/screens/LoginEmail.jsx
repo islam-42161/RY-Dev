@@ -35,7 +35,7 @@ client
 
 const result = avatars.getBrowser("aa");
 
-console.log(result); // Resource URL
+// console.log(result); // Resource URL
 
 const { height, width } = Dimensions.get("screen");
 

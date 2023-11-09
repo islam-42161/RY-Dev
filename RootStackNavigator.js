@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Register from './src/screens/Register';
+import Register from './src/screens/register/Register';
 import LoginEmail from './src/screens/LoginEmail';
 import LoginPhone from './src/screens/LoginPhone';
 
@@ -13,7 +13,7 @@ const RootStackNavigator = () => {
 
   return (
     <NavigationContainer>
-<Navigator initialRouteName='loginphone' screenOptions={{
+<Navigator initialRouteName='register' screenOptions={{
     header:()=>null
 }}>
     <Screen name='loginphone' component={LoginPhone}/>
