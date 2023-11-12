@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import RootStackNavigator from '../RootStackNavigator'
+import SignedOutStack from '../SignedOutStack'
 
 const AppRoot = () => {
   return (
-<RootStackNavigator/>
+<SignedOutStack/>
 )
 }
 

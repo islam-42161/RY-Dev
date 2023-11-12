@@ -9,11 +9,11 @@ import LoginPhone from './src/screens/LoginPhone';
 const Stack = createNativeStackNavigator();
 const Navigator = Stack.Navigator;
 const Screen = Stack.Screen;
-const RootStackNavigator = () => {
+const SignedOutStack = () => {
 
   return (
     <NavigationContainer>
-<Navigator initialRouteName='register' screenOptions={{
+<Navigator initialRouteName='loginphone' screenOptions={{
     header:()=>null
 }}>
     <Screen name='loginphone' component={LoginPhone}/>
@@ -24,4 +24,4 @@ const RootStackNavigator = () => {
   )
 }
 
-export default RootStackNavigator
+export default SignedOutStack
