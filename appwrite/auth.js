@@ -51,7 +51,15 @@ export class AuthService {
         throw error;
     }
   }
-
+  loginGoogle({navigation}){
+    try {
+        this.account.createOAuth2Session('google',()=>{
+          navigation.navigation('home')
+        })
+    } catch (error) {
+        throw error;
+    }
+  }
 }
 
 const authService = new AuthService();

@@ -21,20 +21,7 @@ import {
   Card,
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
-
-import { Client, Avatars } from "appwrite";
-
-const client = new Client();
-
-const avatars = new Avatars(client);
-
-client
-  .setEndpoint("https://cloud.appwrite.io/v1") // Your API Endpoint
-  .setProject("6538a2b56adb2f28e075"); // Your project ID
-
-const result = avatars.getBrowser("aa");
-
-// console.log(result); // Resource URL
+import authService from "../../appwrite/auth";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -45,8 +32,10 @@ const LoginPhone = ({ navigation }) => {
   const handleLogin = () => {
     // Implement your login logic here
   };
+
+
   const handleGoogleLogin = () => {
-    // Implement your login logic here
+
   };
   const handleTwitterLogin = () => {
     // Implement your login logic here

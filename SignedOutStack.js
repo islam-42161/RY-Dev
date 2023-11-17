@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Register from './src/screens/register/Register';
 import LoginEmail from './src/screens/LoginEmail';
 import LoginPhone from './src/screens/LoginPhone';
+import Home from './src/screens/Home';
 
 
 const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ const SignedOutStack = () => {
     <Screen name='loginphone' component={LoginPhone}/>
     <Screen name='loginemail' component={LoginEmail}/>
     <Screen name='register' component={Register}/>
+    <Screen name='home' component={Home}/>
 </Navigator>
     </NavigationContainer>
   )

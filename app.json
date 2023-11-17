@@ -18,11 +18,13 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile":"",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
+    "plugins":["@react-native-google-signin/google-signin"],
     "web": {
       "favicon": "./assets/favicon.png"
     },
