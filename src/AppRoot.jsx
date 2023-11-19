@@ -1,10 +1,26 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import SignedOutStack from '../SignedOutStack'
+import React, { useEffect, useState } from 'react'
+import AuthProvider from '../AuthProvider'
+import RootNavigator from '../RootNavigator'
+import auth from '@react-native-firebase/auth';
+
 
 const AppRoot = () => {
+  const [user, setUser] = useState();
+  function onAuthStateChanged(user) {
+    setUser(user);
+    console.log(user)
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
   return (
-<SignedOutStack/>
+    <AuthProvider user={user} setUser={setUser}>
+<RootNavigator/>
+</AuthProvider>
 )
 }
 

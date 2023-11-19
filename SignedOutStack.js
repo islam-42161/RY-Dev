@@ -13,16 +13,13 @@ const Screen = Stack.Screen;
 const SignedOutStack = () => {
 
   return (
-    <NavigationContainer>
 <Navigator initialRouteName='loginphone' screenOptions={{
     header:()=>null
 }}>
     <Screen name='loginphone' component={LoginPhone}/>
     <Screen name='loginemail' component={LoginEmail}/>
     <Screen name='register' component={Register}/>
-    <Screen name='home' component={Home}/>
 </Navigator>
-    </NavigationContainer>
   )
 }
 
