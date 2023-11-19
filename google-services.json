@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "904714509822",
+    "project_id": "ry-dev-26f88",
+    "storage_bucket": "ry-dev-26f88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904714509822:android:a1985aa7024de2c1c874af",
+        "android_client_info": {
+          "package_name": "com.newto944.RYDev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904714509822-548m438bk1cnjdaoqd1mevflk62uv49q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.newto944.RYDev",
+            "certificate_hash": "777ec92db4cc3e9a079ab426b6b815dcd7da9bb5"
+          }
+        },
+        {
+          "client_id": "904714509822-g8su7ke71722su9pf6aa173cue8mb569.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.newto944.RYDev",
+            "certificate_hash": "44480e2f638f558f68ddca225c2b6afc28103a83"
+          }
+        },
+        {
+          "client_id": "904714509822-qtro8pfhevo2ubfg5aknosmif0r8mc03.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbsiGF1MHSe6Ln-EoBvnveNZD7s79QrLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904714509822-qtro8pfhevo2ubfg5aknosmif0r8mc03.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

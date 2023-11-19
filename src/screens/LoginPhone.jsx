@@ -21,11 +21,28 @@ import {
   Card,
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
-import authService from "../../appwrite/auth";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+
 
 const { height, width } = Dimensions.get("screen");
 
 const LoginPhone = ({ navigation }) => {
+  async function onGoogleButtonPress() {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    // Get the users ID token
+    const { idToken } = await GoogleSignin.signIn();
+  
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+  
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  }
+  GoogleSignin.configure({
+    webClientId: '904714509822-qtro8pfhevo2ubfg5aknosmif0r8mc03.apps.googleusercontent.com',
+  });
   const [phone, setPhone] = useState("");
   const theme = useTheme();
 
@@ -35,7 +52,8 @@ const LoginPhone = ({ navigation }) => {
 
 
   const handleGoogleLogin = () => {
-
+    onGoogleButtonPress(  ).then(() => navigation.navigate('home'))
+    
   };
   const handleTwitterLogin = () => {
     // Implement your login logic here

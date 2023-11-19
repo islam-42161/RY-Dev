@@ -160,7 +160,7 @@ const StepThree = ({ country, setCountryData, city, setCityData }) => {
                 placeholder="Search your city/state"
                 onChangeText={onChangeCityQuery}
                 value={cityQuery}
-                style={{ margin: 16 }}
+                style={{ margin: 16,backgroundColor:theme.colors.surfaceVariant }}
               />
               {/* <Divider /> */}
               {data ? (
