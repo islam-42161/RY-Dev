@@ -20,6 +20,8 @@ import {
   Checkbox,
   Divider,
   Card,
+  HelperText,
+  Snackbar,
 } from "react-native-paper";
 import useKeyboardVisible from "../functions/useKeyboardVisible";
 import { signInWithGoogle } from "../../firebase/firebaseConfig";
@@ -32,29 +34,54 @@ const { height, width } = Dimensions.get("screen");
 const LoginPhone = ({ navigation }) => {
 
   const [phone, setPhone] = useState("");
+  const [error,setError] = useState(false)
   const theme = useTheme();
   const handleLogin = () => {
-    // Implement your login logic here
+    
+    if(!hasErrors()){
+      navigation.navigate('phoneconfirm',{
+        phone:phone,
+        countryCode:'+88'
+      })
+    }
+    else{
+      onShowSnackbar('Enter valid phone number')
+    }
+
   };
 
+  const isKeyboardVisible = useKeyboardVisible();
 
   const handleGoogleLogin = () => {
-    // signInWithGoogle().then((e)=>{
-    //   navigation.navigate('home',{
-    //     name:e.displayName
-    //   })
-    // })
     signInWithGoogle().then((e)=>{
       console.log('logged in')
+    }).catch((reason)=>{
+      onShowSnackbar('Cancelled google signin')
     })
+  }
+
+  function hasErrors() 
+{
+    const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    return !re.test(phone);
+}
+
+
+// Snackbar
+
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const onToggleSnackBar = () => setSnackbarVisible(!snackbarVisible);
+  const onDismissSnackBar = () => {
+    setSnackbarVisible(false)
+    clearSnackbar()
   };
-  const handleTwitterLogin = () => {
-    // Implement your login logic here
-  };
-  const handleFacebookLogin = () => {
-    // Implement your login logic here
-  };
-  const isKeyboardVisible = useKeyboardVisible();
+  const [snackbar,setSnackbar] = useState('')
+  const clearSnackbar = ()=>setSnackbar('')
+  const onShowSnackbar = (message)=>{
+    setSnackbar(message)
+    onToggleSnackBar()
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -74,13 +101,7 @@ const LoginPhone = ({ navigation }) => {
             source={require("../../assets/icon.png")}
             contentFit="cover"
             style={[
-              StyleSheet.absoluteFill,
-              // {
-              //   transform:[
-              //     {translateY:15},
-              //     {scale:0.8}
-              //   ]
-              // }
+              StyleSheet.absoluteFill
             ]}
             // blurRadius={50}
           />
@@ -101,7 +122,7 @@ const LoginPhone = ({ navigation }) => {
             </Button>
             <Button
               mode="outlined"
-              onPress={handleFacebookLogin}
+              // onPress={handleFacebookLogin}
               style={styles.button}
               icon="facebook"
             >
@@ -109,7 +130,7 @@ const LoginPhone = ({ navigation }) => {
             </Button>
             <Button
               mode="outlined"
-              onPress={handleFacebookLogin}
+              // onPress={handleFacebookLogin}
               style={styles.button}
               icon="twitter"
             >
@@ -141,7 +162,6 @@ const LoginPhone = ({ navigation }) => {
             style={styles.input}
             keyboardType="phone-pad"
           />
-
           <Button icon={"arrow-right"} mode="contained" onPress={handleLogin}>
             Continue
           </Button>
@@ -150,7 +170,6 @@ const LoginPhone = ({ navigation }) => {
           variant="labelMedium" style={{ alignSelf: "center" }}>
             Sign in using{" "}
             <Text
-              
               variant="labelMedium"
               style={{ color: theme.colors.primary, alignSelf: "flex-start" }}
             >
@@ -159,6 +178,19 @@ const LoginPhone = ({ navigation }) => {
           </Text>
           {/* <Button onPress={() => navigation.navigate("loginemail")} mode="text">Sign in with email address</Button> */}
         </View>
+        <Snackbar
+        visible={snackbarVisible}
+        onDismiss={onDismissSnackBar}
+        style={{borderRadius:50}}
+        action={{
+          label: 'OK',
+          labelStyle:{color:theme.colors.primary},
+          onPress: () => {
+            // Do nothing
+          },
+        }}>
+        {snackbar}
+      </Snackbar>
       </View>
     </TouchableWithoutFeedback>
   );

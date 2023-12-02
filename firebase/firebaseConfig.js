@@ -24,10 +24,14 @@ const signInWithGoogle = async () => {
     // Sign-in the user with the credential
     return (await auth().signInWithCredential(googleCredential)).user;
   } catch (error) {
-    console.error('Error signing in with Google:', error);
+    // console.error('Error signing in with Google:', error);
     throw error;
   }
 };
+
+async function signInWithPhoneNumber(phoneNumber){
+  return await auth().signInWithPhoneNumber(phoneNumber);
+}
 
 
 const signOut = async () => {
@@ -43,4 +47,4 @@ const signOut = async () => {
     })
 }
 
-export { checkPlayServices, signInWithGoogle, signOut };
+export { checkPlayServices, signInWithGoogle, signInWithPhoneNumber, signOut };
