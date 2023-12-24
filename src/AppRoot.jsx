@@ -7,6 +7,7 @@ import auth from '@react-native-firebase/auth';
 
 const AppRoot = () => {
   const [user, setUser] = useState();
+  const [notifications,setNotifications]=useState([]);
   function onAuthStateChanged(user) {
     setUser(user);
     console.log(user)
@@ -18,7 +19,7 @@ const AppRoot = () => {
   }, []);
 
   return (
-    <AuthProvider user={user} setUser={setUser}>
+    <AuthProvider notifications={notifications} setNotifications={setNotifications} user={user} setUser={setUser}>
 <RootNavigator/>
 </AuthProvider>
 )

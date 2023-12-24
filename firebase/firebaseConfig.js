@@ -3,15 +3,16 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth from '@react-native-firebase/auth';
 
+// configuring google sign in
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_AUTH_WEBCLIENT_ID,
+});
 const checkPlayServices = async () => {
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 };
 
 const signInWithGoogle = async () => {
   try {
-    GoogleSignin.configure({
-      webClientId: process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_AUTH_WEBCLIENT_ID,
-    });
     // Check if your device supports Google Play
     await checkPlayServices();
 

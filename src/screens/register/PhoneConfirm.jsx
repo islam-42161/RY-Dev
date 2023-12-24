@@ -12,6 +12,7 @@ const PhoneConfirm = ({navigation,route}) => {
   const [confirm,setConfirm] = useState(null)
   const [loading,setLoading] = useState(false)
 
+  const [seconds,setSeconds] = useState(120)
 
 
   const [dialogvisible, setDialogVisible] = useState(false);
@@ -67,6 +68,30 @@ const continueConfirmation = ()=>{
     showDialog()
     },[])
 
+// countdown
+    useEffect(() => {
+      // Set an interval to increment the seconds every second
+      const interval = setInterval(() => {
+        // Check if the timer has reached 120 seconds
+        if (seconds > 0) {
+          // Increment the seconds
+          setSeconds(prevSeconds => prevSeconds - 1);
+        } else {
+          // If the timer reaches 120 seconds, clear the interval to stop counting
+          clearInterval(interval);
+        }
+      }, 1000); // Run every second (1000 milliseconds)
+  
+      // Clean up the interval when the component is unmounted
+      return () => clearInterval(interval);
+    }, [seconds]); // The effect depends on the 'seconds' state variable
+  
+
+const resendCode=()=>{
+  setSeconds(120)
+  console.log('resendSMS')
+}
+
   return (
     <TouchableWithoutFeedback
      onPress={Keyboard.dismiss}>
@@ -97,14 +122,17 @@ const continueConfirmation = ()=>{
     <Text onPress={()=>navigation.goBack()} style={[theme.fonts.bodyLarge,{alignSelf:'center',color:theme.colors.secondary}]}>Wrong number?</Text>
     </View>
       <OTPTextInput inputCount={6} ref={otpInput} handleTextChange={handleTextChange}/>
-    <Text style={[theme.fonts.bodyMedium,{alignSelf:'center',color:theme.colors.surfaceDisabled,fontWeight:'bold'}]}>Enter 6-digit code</Text>
+    <Text style={[theme.fonts.bodyMedium,{color:theme.colors.surfaceDisabled,fontWeight:'bold',alignSelf:'center'}]}>Enter 6-digit code</Text>
     
     <View>
     <List.Item
+    disabled={seconds>0?true:false}
+    // disabled
     title="Resend SMS"
     // description="Item description"
     left={props => <List.Icon {...props} icon="message-text-outline" />}
-    onPress={()=>console.log('Resend SMS')}
+    right={props=>  <Text style={[theme.fonts.bodySmall,{color:theme.colors.surfaceDisabled}]}>{seconds} seconds</Text>}
+    onPress={resendCode}
 
   />
   <Divider/>
