@@ -3,6 +3,8 @@ import React, { useContext, useState, useEffect } from 'react'
 import { signOut } from '../../firebase/firebaseConfig'
 import { AuthContext } from '../../AuthProvider'
 import { View, Text, StatusBar } from 'react-native';
+import Header from '../components/Header';
+import MainContainer from './MainContainer';
 
 const Home = ({route,navigation}) => {
   const {user} = useContext(AuthContext)
@@ -27,12 +29,8 @@ const Home = ({route,navigation}) => {
   }, [seconds]); // The effect depends on the 'seconds' state variable
 
   return (
+    <MainContainer title={"Home"} navigation={navigation}>
     <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-    <StatusBar
-          translucent
-          backgroundColor={"transparent"}
-          barStyle={"light-content"}
-        />
       <Text>Hi, {user.displayName}!</Text>
       <Text onPress={()=>{
         signOut()
@@ -45,6 +43,7 @@ const Home = ({route,navigation}) => {
 }}>{seconds}</Text>
 
     </View>
+    </MainContainer>
   );
 };
 

@@ -9,30 +9,16 @@ import {
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { IconButton, useTheme,Colors, MD3Colors } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../../AuthProvider";
 import Animated, {
-  FadeOut,
-  LightSpeedOutRight,
-  SlideOutRight,
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
 import {
-  Directions,
-  Gesture,
-  GestureDetector,
   Swipeable,
 } from "react-native-gesture-handler";
-import Header from "../components/Header";
+import MainContainer from "./MainContainer";
 
-// StatusBar.setHidden(true)
 const AnimatedNotificationItem = Animated.createAnimatedComponent(Pressable);
 
-// const  {height,width} = Dimensions.get('screen')
-const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 const Notifications = ({ navigation, route }) => {
   const { notifications, setNotifications } = useContext(AuthContext);
   const theme = useTheme();
@@ -77,7 +63,9 @@ const Notifications = ({ navigation, route }) => {
         <AnimatedNotificationItem
           style={[
             styles.notification_item,
-            { backgroundColor: theme.colors.surfaceVariant },
+            { 
+              backgroundColor: theme.colors.background
+            },
           ]}
         >
           <View
@@ -110,41 +98,11 @@ const Notifications = ({ navigation, route }) => {
   };
 
   return (
-    <View style={[styles.root, { backgroundColor: theme.colors.background }]}>
-      <StatusBar
-        translucent
-        backgroundColor={"transparent"}
-        barStyle={"light-content"}
-      />
-      <View style={styles.container}>
-        <Header title={"Notifications"}/>
-        {/* <SegmentedButtons
-          value={value}
-          onValueChange={setValue}
-          style={{ marginHorizontal: 20 }}
-          buttons={[
-            {
-              value: "all",
-              label: "All",
-            },
-            {
-              value: "facebook",
-              label: "Facebook",
-              icon: "facebook",
-            },
-            {
-              value: "youtube",
-              label: "Youtube",
-              icon: "youtube",
-            },
-            {
-              value: "linkedin",
-              label: "LinkedIn",
-              icon: "linkedin",
-            },
-          ]}
-        /> */}
-
+<MainContainer title={"Notifications"} titleBadge={notifications.length} navigation={navigation}>
+      <View style={[styles.container,
+      { 
+        // backgroundColor: theme.colors.background 
+      }]}>
         {/* notifications */}
         <FlatList
           data={notifications}
@@ -153,34 +111,31 @@ const Notifications = ({ navigation, route }) => {
             <SwipeableRow index={index} item={item} />
           )}
           keyExtractor={(item, index) => index.toString()}
+          ItemSeparatorComponent={()=><View style={{height:StyleSheet.hairlineWidth,backgroundColor:'black',marginVertical:10}}/>}
         />
       </View>
-    </View>
+    </MainContainer>
   );
 };
 export default Notifications;
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    paddingTop: STATUSBAR_HEIGHT * 1.5,
-  },
   container: {
     flex: 1,
     gap: 10,
   },
   notifications: {
-    gap: 20,
+    // gap: 20,
     // marginHorizontal: 20,
     paddingBottom: "10%",
   },
   notification_item: {
-    // paddingHorizontal:10*1.2,
-    // paddingVertical:10,
-    padding: 10,
-    borderRadius: 10,
+    // padding: 10,
+    // borderRadius: 10,
     // borderWidth: StyleSheet.hairlineWidth,
     gap: 5,
-    marginHorizontal: 20,
+    // paddingVertical:10,
+    paddingHorizontal: 20,
+    // paddingHorizontal:20,paddingVertical:10,
   },
 });
