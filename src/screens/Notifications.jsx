@@ -1,18 +1,35 @@
 import {
-  Dimensions,
   StyleSheet,
   Text,
   View,
   StatusBar,
   ScrollView,
   Pressable,
+  FlatList,
 } from "react-native";
 import React, { useContext, useEffect } from "react";
-import { Avatar, Card, IconButton, SegmentedButtons, useTheme } from "react-native-paper";
+import { IconButton, useTheme,Colors, MD3Colors } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../../AuthProvider";
+import Animated, {
+  FadeOut,
+  LightSpeedOutRight,
+  SlideOutRight,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import {
+  Directions,
+  Gesture,
+  GestureDetector,
+  Swipeable,
+} from "react-native-gesture-handler";
+import Header from "../components/Header";
 
 // StatusBar.setHidden(true)
+const AnimatedNotificationItem = Animated.createAnimatedComponent(Pressable);
 
 // const  {height,width} = Dimensions.get('screen')
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
@@ -41,9 +58,57 @@ const Notifications = ({ navigation, route }) => {
         title: "Motivational Message",
         message:
           "Remember, the key to success is consistency. Keep pushing, you're doing great!",
-      }]
-    );
+      },
+    ]);
   }, []);
+
+  function deleteNotification(index) {
+    setNotifications((prevNotifications) => {
+      return prevNotifications.filter((item, i) => i !== index);
+    });
+  }
+  const SwipeableRow = ({ item, index }) => {
+  const renderRightActions = () => (
+    <IconButton icon={'delete'} mode="contained" onPress={()=>deleteNotification(index)} iconColor={MD3Colors.error60} containerColor={MD3Colors.error90} style={{alignSelf:'center',marginEnd:20}}/>
+  );
+
+    return (
+      <Swipeable renderRightActions={renderRightActions}>
+        <AnimatedNotificationItem
+          style={[
+            styles.notification_item,
+            { backgroundColor: theme.colors.surfaceVariant },
+          ]}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 20,
+            }}
+          >
+            <Text
+              style={[theme.fonts.titleMedium, { flex: 1 }]}
+              numberOfLines={1}
+            >
+              {item.title}
+            </Text>
+            {/* <Ionicons
+              name="close-outline"
+              onPress={() => deleteNotification(index)}
+              size={theme.fonts.titleMedium.fontSize}
+              style={{ margin: 2.5 }}
+            /> */}
+            {/* <IconButton icon={'close'} mode="contained" size={theme.fonts.bodyMedium.fontSize}/> */}
+          </View>
+          {/* <View style={{height:StyleSheet.hairlineWidth,backgroundColor:'black'}}/> */}
+          <Text style={[theme.fonts.bodyMedium]}>{item.message}</Text>
+        </AnimatedNotificationItem>
+      </Swipeable>
+    );
+  };
+
   return (
     <View style={[styles.root, { backgroundColor: theme.colors.background }]}>
       <StatusBar
@@ -52,23 +117,7 @@ const Notifications = ({ navigation, route }) => {
         barStyle={"light-content"}
       />
       <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 10,
-            alignItems: "center",
-            marginHorizontal: 20,
-          }}
-        >
-          <Ionicons
-            name="ios-notifications-outline"
-            size={theme.fonts.displaySmall.fontSize}
-            color={"black"}
-          />
-          <Text style={[{ fontSize: theme.fonts.displaySmall.fontSize }]}>
-            Notifications
-          </Text>
-        </View>
+        <Header title={"Notifications"}/>
         {/* <SegmentedButtons
           value={value}
           onValueChange={setValue}
@@ -97,23 +146,14 @@ const Notifications = ({ navigation, route }) => {
         /> */}
 
         {/* notifications */}
-        <ScrollView contentContainerStyle={styles.notifications}>
-          {notifications.map((value, index) => {
-            return (
-              <Pressable key={index} style={[styles.notification_item]}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',gap:20}}>
-                <Text style={[theme.fonts.bodyLarge,{flex:1}]} numberOfLines={1}>{value.title}</Text>
-                <Ionicons name="close-outline" size={theme.fonts.bodyLarge.fontSize} style={{margin:2.5}}/>
-                {/* <IconButton icon={'close'} mode="contained" size={theme.fonts.bodyMedium.fontSize} iconColor={theme.colors.error} style={{backgroundColor:'#ff00001e'}}/> */}
-                </View>
-                <View style={{height:StyleSheet.hairlineWidth,backgroundColor:'black'}}/>
-                <Text style={[theme.fonts.bodyMedium]}>
-                  {value.message}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
+        <FlatList
+          data={notifications}
+          contentContainerStyle={styles.notifications}
+          renderItem={({ item, index }) => (
+            <SwipeableRow index={index} item={item} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     </View>
   );
@@ -130,14 +170,17 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   notifications: {
-    gap: 10,
-    marginHorizontal: 20,
-    paddingBottom:"10%"
+    gap: 20,
+    // marginHorizontal: 20,
+    paddingBottom: "10%",
   },
   notification_item: {
+    // paddingHorizontal:10*1.2,
+    // paddingVertical:10,
     padding: 10,
-    borderRadius: 5,
-    borderWidth: StyleSheet.hairlineWidth,
-    gap: 2.5,
+    borderRadius: 10,
+    // borderWidth: StyleSheet.hairlineWidth,
+    gap: 5,
+    marginHorizontal: 20,
   },
 });
