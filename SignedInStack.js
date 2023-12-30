@@ -5,7 +5,16 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Notifications from './src/screens/Notifications';
 import { useTheme } from 'react-native-paper';
 import RYDrawer from './src/components/RYDrawer';
-import { Ionicons } from '@expo/vector-icons';
+
+import Activities from './src/screens/Activities';
+import MyCourses from './src/screens/Courses/MyCourses';
+import AllCourses from './src/screens/Courses/AllCourses';
+import MyGroups from './src/screens/Groups/MyGroups';
+import AllGroups from './src/screens/Groups/AllGroups';
+import TaskBoard from './src/screens/TaskBoard';
+import RYFeeds from './src/screens/RYFeeds';
+import Coach from './src/screens/Coach';
+
 
 // const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -16,17 +25,23 @@ const theme = useTheme()
   return (
 <Navigator initialRouteName='home' drawerContent={props=><RYDrawer {...props}/>} screenOptions={{
     header:()=>null,
-    drawerActiveBackgroundColor:theme.colors.secondary,
-    drawerActiveTintColor:theme.colors.onSecondary,
     drawerType:'slide'
 }}>
-    <Screen name='home' component={Home} options={{
-      title:'Home',
-      drawerIcon:({color})=>(
-        <Ionicons name="home-outline" size={22} color={color} />
-      )
-    }} />
-    <Screen name='notifications' options={{title:'Notifications'}} component={Notifications}/>
+    <Screen name='home' component={Home}/>
+    <Screen name='activities' component={Activities}/>
+    <Screen name='taskboard' component={TaskBoard}/>
+    
+    {/* courses */}
+    <Screen name='mycourses' component={MyCourses}/>
+    <Screen name='allcourses' component={AllCourses}/>
+    {/* groups */}
+    <Screen name='mygroups' component={MyGroups}/>
+    <Screen name='allgroups' component={AllGroups}/>
+
+    <Screen name='ryfeeds' component={RYFeeds}/>
+    <Screen name='coach' component={Coach}/>
+    <Screen name='notifications' component={Notifications}/>
+
 </Navigator>
   )
 }

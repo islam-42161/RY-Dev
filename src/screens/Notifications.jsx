@@ -2,51 +2,24 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar,
-  ScrollView,
-  Pressable,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { IconButton, useTheme,Colors, MD3Colors } from "react-native-paper";
 import { AuthContext } from "../../AuthProvider";
-import Animated, {
-} from "react-native-reanimated";
+import Animated, { useAnimatedRef } from "react-native-reanimated";
 import {
-  Swipeable,
+  Swipeable,openRight
 } from "react-native-gesture-handler";
 import MainContainer from "./MainContainer";
 
-const AnimatedNotificationItem = Animated.createAnimatedComponent(Pressable);
+const AnimatedNotificationItem = Animated.createAnimatedComponent(TouchableOpacity);
 
 const Notifications = ({ navigation, route }) => {
   const { notifications, setNotifications } = useContext(AuthContext);
   const theme = useTheme();
-  const [value, setValue] = React.useState("all");
-  useEffect(() => {
-    setNotifications([
-      {
-        title: "Welcome to our Life Coaching Organization!",
-        message:
-          "We're excited to have you on board and look forward to helping you achieve your personal and professional goals.",
-      },
-      {
-        title: "Life Coaching Session Reminder",
-        message:
-          "Just a friendly reminder that you have a life coaching session scheduled for tomorrow. We look forward to seeing you!",
-      },
-      {
-        title: "Congratulations on Your Achievement!",
-        message:
-          "We're thrilled to see you making progress towards your goals. Keep up the great work!",
-      },
-      {
-        title: "Motivational Message",
-        message:
-          "Remember, the key to success is consistency. Keep pushing, you're doing great!",
-      },
-    ]);
-  }, []);
+
 
   function deleteNotification(index) {
     setNotifications((prevNotifications) => {
@@ -54,13 +27,20 @@ const Notifications = ({ navigation, route }) => {
     });
   }
   const SwipeableRow = ({ item, index }) => {
+    const swiperef = useAnimatedRef()
+    const swipeLeft = () =>{
+      swiperef.current.openRight()
+    }
   const renderRightActions = () => (
     <IconButton icon={'delete'} mode="contained" onPress={()=>deleteNotification(index)} iconColor={MD3Colors.error60} containerColor={MD3Colors.error90} style={{alignSelf:'center',marginEnd:20}}/>
   );
 
     return (
-      <Swipeable renderRightActions={renderRightActions}>
+      <Swipeable ref={swiperef} renderRightActions={renderRightActions}>
         <AnimatedNotificationItem
+        onLongPress={()=>{
+          swipeLeft()
+        }}
           style={[
             styles.notification_item,
             { 
