@@ -1,10 +1,10 @@
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useContext, useEffect } from "react";
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { Avatar, Button, Drawer, List, MD3Colors, useTheme } from "react-native-paper";
+import { Avatar, Button, Divider, Drawer, List, MD3Colors, Menu, TouchableRipple, useTheme } from "react-native-paper";
 import { MaterialIcons,SimpleLineIcons,Ionicons,MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../AuthProvider";
 import { Image } from "expo-image";
@@ -15,27 +15,44 @@ const STATUSBAR_HEIGHT = StatusBar.currentHeight
 
 const RYDrawer = (props) => {
   const [active, setActive] = React.useState("home");
+
+  const [menuVisible, setMenuVisible] = React.useState(false);
+
+  const openMenu = () => setMenuVisible(true);
+
+  const closeMenu = () => setMenuVisible(false);
+
+
   const num_notifications = useContext(AuthContext).notifications.length;
   const { navigation } = props;
   const theme = useTheme()
   const profile = useContext(AuthContext).user
   useEffect(() => {
-    navigation.jumpTo(active);
-  }, [active]);
+    navigation.jumpTo(active)
+  }, [active])
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.colors.background}]}>
     <View style={styles.profile}>
-<Image
-  source={require('../../assets/icon.png')}
-  style={StyleSheet.absoluteFill}
-/>
-<View style={{position:'absolute',elevation:1,bottom:-14,alignSelf:'center',gap:10,borderRadius:20,backgroundColor:'white',alignItems:'center',flexDirection:'row',padding:2,width:"80%"}}>
-<Text  style={[theme.fonts.titleSmall,{marginLeft:10,flex:1}]} numberOfLines={1} adjustsFontSizeToFit>{profile.displayName}</Text>
-<Avatar.Image size={24} source={{uri:profile.photoURL}}/>
+    <Image
+    source={require('../../assets/icon.png')}
+    style={StyleSheet.absoluteFill}
+    blurRadius={50}
+    />
+<View style={styles.profile_top}>
+
+<Pressable style={{padding:2,height:50,width:50,borderRadius:25,backgroundColor:'white'}}>
+<Avatar.Image size={46} source={{uri:profile.photoURL}}/>
+</Pressable>
+            <Ionicons name="ios-moon" size={25} color="white" />
 </View>
+
+        <Pressable onPress={openMenu} style={{gap:5,paddingHorizontal:20,paddingVertical:15}}>
+            <Text style={[theme.fonts.titleSmall,{color:'white'}]} adjustsFontSizeToFit>{profile.displayName}</Text>
+            <Text style={[theme.fonts.labelSmall,{opacity:0.5,color:'white'}]} adjustsFontSizeToFit>{profile.email}</Text>
+        </Pressable>
     </View>
     {/* <DrawerContentScrollView {...props}> */}
-    <ScrollView {...props} style={{borderBottomColor:'gray',borderBottomWidth:StyleSheet.hairlineWidth}} contentContainerStyle={{paddingBottom:20,paddingTop:6}}>
+    <ScrollView {...props} style={{borderBottomColor:'gray',borderBottomWidth:StyleSheet.hairlineWidth}} contentContainerStyle={{paddingVertical:20}}>
       {/* <Drawer.Section title='RN-Paper Section'> */}
       <Drawer.Item
         {...props}
@@ -62,6 +79,7 @@ const RYDrawer = (props) => {
         active={active === "taskboard"}
         onPress={() => setActive("taskboard")}
       />
+      <Divider style={{marginVertical:5}}/>
         <Drawer.Item
         {...props}
         label="My Courses"
@@ -80,6 +98,8 @@ const RYDrawer = (props) => {
         active={active === "allcourses"}
         onPress={() => setActive("allcourses")}
       />
+      <Divider style={{marginVertical:5}}/>
+
       <Drawer.Item
         {...props}
         label="My Groups"
@@ -98,6 +118,7 @@ const RYDrawer = (props) => {
         active={active === "allgroups"}
         onPress={() => setActive("allgroups")}
       />
+      <Divider style={{marginVertical:5}}/>
 
       <Drawer.Item
         {...props}
@@ -140,11 +161,8 @@ const RYDrawer = (props) => {
       {/* <DrawerItemList {...props} /> */}
       </ScrollView>
     {/* </DrawerContentScrollView> */}
-
-    <TouchableOpacity style={{flexDirection:'row',alignItems:'center',gap:20,paddingVertical:15,paddingHorizontal:10,marginHorizontal:20,marginBottom:20,backgroundColor:MD3Colors.error90,borderRadius:30}}>
-    <MaterialCommunityIcons name="logout" size={theme.fonts.titleLarge.fontSize} color={MD3Colors.error50}/>
-    <Text style={[theme.fonts.labelLarge,{color:MD3Colors.error50}]}>LOG OUT</Text>
-    </TouchableOpacity>
+  
+          
     </View>
   );
 };
@@ -154,10 +172,18 @@ export default RYDrawer;
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    gap:20
+    // gap:20
   },
   profile:{
-    height:"30%",
-    width:"100%"
+    height:"25%",
+    width:"100%",
+    justifyContent:'space-between'
+  },
+  profile_top:{
+    paddingTop:STATUSBAR_HEIGHT*1.25,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    paddingHorizontal:20,
+    paddingBottom:STATUSBAR_HEIGHT*0.25
   }
 });
