@@ -16,17 +16,15 @@ const STATUSBAR_HEIGHT = StatusBar.currentHeight
 const RYDrawer = (props) => {
   const [active, setActive] = React.useState("home");
 
-  const [menuVisible, setMenuVisible] = React.useState(false);
-
-  const openMenu = () => setMenuVisible(true);
-
-  const closeMenu = () => setMenuVisible(false);
-
-
   const num_notifications = useContext(AuthContext).notifications.length;
+  const profile = useContext(AuthContext).user
+  const {setProfileModalVisible} = useContext(AuthContext)
+  const showModal = ()=>{
+    setProfileModalVisible(true)
+
+  }
   const { navigation } = props;
   const theme = useTheme()
-  const profile = useContext(AuthContext).user
   useEffect(() => {
     navigation.jumpTo(active)
   }, [active])
@@ -40,13 +38,13 @@ const RYDrawer = (props) => {
     />
 <View style={styles.profile_top}>
 
-<Pressable style={{padding:2,height:50,width:50,borderRadius:25,backgroundColor:'white'}}>
+<Pressable onPress={showModal} style={{padding:2,height:50,width:50,borderRadius:25,backgroundColor:'white'}}>
 <Avatar.Image size={46} source={{uri:profile.photoURL}}/>
 </Pressable>
             <Ionicons name="ios-moon" size={25} color="white" />
 </View>
 
-        <Pressable onPress={openMenu} style={{gap:5,paddingHorizontal:20,paddingVertical:15}}>
+        <Pressable onPress={showModal} style={{gap:5,paddingHorizontal:20,paddingVertical:15}}>
             <Text style={[theme.fonts.titleSmall,{color:'white'}]} adjustsFontSizeToFit>{profile.displayName}</Text>
             <Text style={[theme.fonts.labelSmall,{opacity:0.5,color:'white'}]} adjustsFontSizeToFit>{profile.email}</Text>
         </Pressable>

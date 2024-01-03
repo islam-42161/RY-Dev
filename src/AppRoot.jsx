@@ -30,6 +30,7 @@ const AppRoot = () => {
       },
     ]
   );
+  const [profileModalVisible,setProfileModalVisible] = useState(false);
   function onAuthStateChanged(user) {
     setUser(user);
     console.log(user)
@@ -41,7 +42,7 @@ const AppRoot = () => {
   }, []);
 
   return (
-    <AuthProvider notifications={notifications} setNotifications={setNotifications} user={user} setUser={setUser}>
+    <AuthProvider notifications={notifications} setNotifications={setNotifications} user={user} setUser={setUser} profileModalVisible={profileModalVisible} setProfileModalVisible={setProfileModalVisible} >
 <RootNavigator/>
 </AuthProvider>
 )
