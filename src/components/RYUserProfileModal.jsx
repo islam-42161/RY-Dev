@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import { Avatar, Divider, MD3Colors, Modal, Portal, useTheme } from 'react-native-paper'
 import { AuthContext } from '../../AuthProvider'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { signOut } from '../../firebase/firebaseConfig';
 
 const RYUserProfileModal = () => {
   const {profileModalVisible,setProfileModalVisible,user} = useContext(AuthContext);
@@ -31,11 +32,17 @@ const theme = useTheme()
 <Text style={theme.fonts.bodyLarge}>My Goals</Text>
 </TouchableOpacity>
           </View>
+          {user.password && (
+
           <TouchableOpacity style={{flexDirection:'row',gap:20,paddingHorizontal:20,paddingVertical:10,alignItems:'center'}}>
 <MaterialCommunityIcons name="form-textbox-password" size={theme.fonts.bodyLarge.fontSize*1.5} color="black" />
 <Text style={theme.fonts.bodyLarge}>Change Password</Text>
 </TouchableOpacity>
-<TouchableOpacity style={{flexDirection:'row',gap:20,paddingHorizontal:20,paddingVertical:10,alignItems:'center',marginBottom:20}}>
+          )}
+<TouchableOpacity onPress={()=>{
+  hideModal()
+  signOut()
+  }} style={{flexDirection:'row',gap:20,paddingHorizontal:20,paddingVertical:10,alignItems:'center',marginBottom:20}}>
 <MaterialCommunityIcons name="logout" size={theme.fonts.bodyLarge.fontSize*1.5} color={MD3Colors.error60} />
 <Text style={[theme.fonts.bodyLarge,{color:MD3Colors.error60}]}>Logout</Text>
 </TouchableOpacity>

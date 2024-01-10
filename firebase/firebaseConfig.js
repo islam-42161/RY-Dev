@@ -35,6 +35,25 @@ async function signInWithPhoneNumber(phoneNumber){
 }
 
 
+// const signOut = async () => {
+//   auth()
+//     .signOut()
+//     .then(() => {
+//       console.log('User signed out!')
+//       return true
+//     }).catch(()=>{
+//       return false
+//     })
+// }
+
+// const revokeAccess = async () => {
+//   GoogleSignin.revokeAccess().then(()=>{
+//     console.log('Access revoked for Google users!')
+//     return true
+//   })
+// }
+
+
 const signOut = async () => {
   auth()
     .signOut()

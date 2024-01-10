@@ -81,9 +81,8 @@ const StepTwo = ({ f_name, setFname, setDate, date, setGender, gender }) => {
           {showdate && (
             <DateTimePicker
               testID="dateTimePicker"
-              value={date ? date : new Date(null)}
+              value={date ? date : new Date()}
               mode="date"
-              is24Hour={true}
               onChange={onChange}
             />
           )}
