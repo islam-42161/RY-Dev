@@ -2,6 +2,7 @@
 
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 // configuring google sign in
 GoogleSignin.configure({
@@ -67,4 +68,41 @@ const signOut = async () => {
     })
 }
 
-export { checkPlayServices, signInWithGoogle, signInWithPhoneNumber, signOut };
+
+const addNewTask = async () => {
+await firestore().collection("Tasks/Sazzad").add({
+  title: "Sample task title",
+  task_type: "Task A",
+  recurring: true,
+  recur_period: 0,
+  end_time: new Date().getTime(),
+  end_date: Timestamp.fromDate(new Date()),
+  tags:[]
+}).then(()=>{
+  console.log("Added new document")
+})
+}
+
+const getQuoteOfToday = async () => {
+  try {
+    const today = new Date();
+    const dateString = today.toISOString().split('T')[0]; // get date in 'yyyy-mm-dd' format
+    const dailyQuotes = await firestore().collection('daily_quotes').where('date', '==', dateString).get();
+    
+    if (!dailyQuotes.empty) {
+      return dailyQuotes.docs[0].data(); // return the data of the first (and should be the only) document
+    } else {
+      console.log('No quote found for today');
+      return null
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+
+
+
+export { checkPlayServices, signInWithGoogle, signInWithPhoneNumber, signOut ,addNewTask, getQuoteOfToday};

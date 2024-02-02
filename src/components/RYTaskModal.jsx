@@ -12,6 +12,7 @@ import {
 } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { addNewTask } from "../../firebase/firebaseConfig";
 
 const taskTypes = ["Task A", "Task B", "Task C", "Task D"];
 const recurringTimes = [
@@ -84,6 +85,7 @@ const RYTaskModal = ({ hideModal, taskModalVisible }) => {
 
   const handleSavePress = () => {
     console.log("pressed save button")
+    addNewTask()
   }
 
   return (
@@ -229,7 +231,12 @@ const RYTaskModal = ({ hideModal, taskModalVisible }) => {
           <Chip icon={"plus"} mode="outlined">
             Add Tag
           </Chip>
-          
+          <TextInput
+            placeholder="Title"
+            // value={title}
+            // onChangeText={(text) => setTitle(text)}
+            style={[theme.fonts.labelLarge,{flex:1}]}
+          />
         </View>
         <View
           style={{
