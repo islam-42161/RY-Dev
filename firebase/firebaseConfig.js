@@ -4,6 +4,14 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+
+
+// get timezone
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+
+
 // configuring google sign in
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_AUTH_WEBCLIENT_ID,
@@ -85,20 +93,20 @@ await firestore().collection("Tasks/Sazzad").add({
 
 const getQuoteOfToday = async () => {
   try {
-    const today = new Date();
-    const dateString = today.toISOString().split('T')[0]; // get date in 'yyyy-mm-dd' format
-    const dailyQuotes = await firestore().collection('daily_quotes').where('date', '==', dateString).get();
+    const date = new Date().toLocaleDateString('sv-SE', {timeZone: timezone}); // get date in 'yyyy-mm-dd' format
+    const dailyQuotes = await firestore().collection('daily_quotes').where('date', '==', date).get();
     
     if (!dailyQuotes.empty) {
       return dailyQuotes.docs[0].data(); // return the data of the first (and should be the only) document
     } else {
       console.log('No quote found for today');
-      return null
+      return null;
     }
   } catch (error) {
     console.log(error);
   }
 }
+
 
 
 

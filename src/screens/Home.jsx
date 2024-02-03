@@ -14,20 +14,26 @@ const Home = ({route,navigation}) => {
   useEffect(()=>{
     getQuoteOfToday().then(quoteData => {
       console.log(quoteData);
+      
+
       setQuote(quoteData);
     });
   },[])
   return (
     <MainContainer title={"Home"} navigation={navigation}>
     <View style={{marginHorizontal:20,marginTop:10,paddingTop:10,gap:10,elevation:5,backgroundColor:theme.colors.background,borderRadius:20,overflow:'hidden',alignItems:'center'}}>
-      <Text style={[theme.fonts.titleMedium]}>🗨️ Quote Of The Day</Text>
-    {quote && 
+      <Text style={[theme.fonts.titleMedium]}>🌞 Daily Dose of Inspiration</Text>
+    {quote ?(
       <AnimatedImage
       entering={FadeIn.duration(1000)}
         source={{uri:quote.quote}}
         style={{width:"100%",aspectRatio:1}}
         contentFit='cover'
       />
+    ):(
+      <Text style={[{opacity:0.5,marginBottom:10},theme.fonts.bodySmall]}>No quote for today</Text>
+    ) 
+      
     }
     </View>
 
