@@ -16,6 +16,7 @@ const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_AUTH_WEBCLIENT_ID,
 });
+
 const checkPlayServices = async () => {
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 };
