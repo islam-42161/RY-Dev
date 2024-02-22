@@ -3,6 +3,7 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import messaging from "@react-native-firebase/messaging";
 
 
 
@@ -33,12 +34,19 @@ const signInWithGoogle = async () => {
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
     // Sign-in the user with the credential
-    return (await auth().signInWithCredential(googleCredential)).user;
+    const user = (await auth().signInWithCredential(googleCredential)).user;
+
+    // Upload the user info to firestore
+    await registerNewUser(user);
+
+    // Return the user object
+    return user;
   } catch (error) {
     // console.error('Error signing in with Google:', error);
     throw error;
   }
 };
+
 
 async function signInWithPhoneNumber(phoneNumber){
   return await auth().signInWithPhoneNumber(phoneNumber);
@@ -109,9 +117,46 @@ const getQuoteOfToday = async () => {
 }
 
 
+const registerNewUser = async (user) => {
+  // Get the user data from the user object
+  const userData = {
+    uid:user.uid,
+    firstName: user.displayName,
+    email: user.email,
+    photoURL:user.photoURL,
+    phoneNumber:user.phoneNumber
+  };
+
+  // Register the new user in firestore
+  await firestore()
+    .collection('users')
+    .doc(user.uid)
+    .set(userData)
+    .then(() => {
+      console.log('User added!');
+    });
+   messaging().getToken().then(token=>{
+    uploadDeviceFCMToken(user.uid,token);
+    })
+}
+
+
+
+const uploadDeviceFCMToken = async(uid,token)=>{
+  // Add the token to the users datastore
+  await firestore()
+    .collection('users')
+    .doc(uid)
+    .update({
+      fcm_tokens: firestore.FieldValue.arrayUnion(token),
+    });
+
+}
 
 
 
 
 
-export { checkPlayServices, signInWithGoogle, signInWithPhoneNumber, signOut ,addNewTask, getQuoteOfToday};
+
+
+export { checkPlayServices, signInWithGoogle, signInWithPhoneNumber, signOut ,addNewTask, getQuoteOfToday,uploadDeviceFCMToken,registerNewUser};

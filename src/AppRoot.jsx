@@ -4,6 +4,7 @@ import AuthProvider from "../AuthProvider";
 import RootNavigator from "../RootNavigator";
 import auth from "@react-native-firebase/auth";
 import messaging from "@react-native-firebase/messaging";
+import { registerNewUser, uploadDeviceFCMToken } from "../firebase/firebaseConfig";
 
 const AppRoot = () => {
   const requestPermission = async () => {
@@ -22,9 +23,9 @@ const AppRoot = () => {
 
   useEffect(() => {
     requestPermission();
-    messaging().getToken().then(token=>{
-      console.log(token)
-    })
+    // messaging().getToken().then(token=>{
+    //   console.log(token)
+    // })
     // when app is in quit mode
     messaging()
       .getInitialNotification()
@@ -94,6 +95,7 @@ const AppRoot = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    // console.log(user.uid)
     return subscriber; // unsubscribe on unmount
   }, []);
 
