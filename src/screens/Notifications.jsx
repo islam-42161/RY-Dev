@@ -13,6 +13,21 @@ import {
   Swipeable,openRight
 } from "react-native-gesture-handler";
 import MainContainer from "./MainContainer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { subscribeToNotifications } from "../../firebase/firebaseConfig";
+
+
+const saveNotifications = async (value) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('notifications', jsonValue);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+
+
 
 const AnimatedNotificationItem = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -71,11 +86,33 @@ const Notifications = ({ navigation, route }) => {
             {/* <IconButton icon={'close'} mode="contained" size={theme.fonts.bodyMedium.fontSize}/> */}
           </View>
           {/* <View style={{height:StyleSheet.hairlineWidth,backgroundColor:'black'}}/> */}
-          <Text style={[theme.fonts.bodyMedium]}>{item.message}</Text>
+          <Text style={[theme.fonts.bodyMedium]}>{item.body}</Text>
         </AnimatedNotificationItem>
       </Swipeable>
     );
   };
+
+  useEffect(() => {
+    const unsubscribe = subscribeToNotifications(
+      (newNotifications) => {
+        setNotifications(newNotifications);
+      },
+      (error) => {
+        console.log("Error: ", error);
+      }
+    );
+  
+    // Clean up the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
+    useEffect(() => {
+    saveNotifications(notifications).then(() => {
+      console.log('Notifications saved to AsyncStorage.');
+    }).catch((error) => {
+      console.error('Failed to save notifications:', error);
+    });
+  }, [notifications]); // This will trigger the effect whenever 'notifications' changes
 
   return (
 <MainContainer title={"Notifications"} titleBadge={notifications.length} navigation={navigation}>

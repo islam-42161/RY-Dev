@@ -6,6 +6,7 @@ import auth from "@react-native-firebase/auth";
 import messaging from "@react-native-firebase/messaging";
 import { registerNewUser, uploadDeviceFCMToken } from "../firebase/firebaseConfig";
 
+
 const AppRoot = () => {
   const requestPermission = async () => {
     const authStatus = await messaging().requestPermission();

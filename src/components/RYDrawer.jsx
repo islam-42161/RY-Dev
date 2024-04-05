@@ -77,6 +77,15 @@ const RYDrawer = (props) => {
         active={active === "taskboard"}
         onPress={() => setActive("taskboard")}
       />
+      <Drawer.Item
+        {...props}
+        label="Wallpapers"
+        icon={({ size, color }) => (
+          <MaterialCommunityIcons name="image" size={size} color={color} />
+        )}
+        active={active === "wallpapers"}
+        onPress={() => setActive("wallpapers")}
+      />
       <Divider style={{marginVertical:5}}/>
         <Drawer.Item
         {...props}

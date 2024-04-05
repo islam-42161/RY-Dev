@@ -4,6 +4,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import messaging from "@react-native-firebase/messaging";
+import storage from '@react-native-firebase/storage';
 
 
 
@@ -117,29 +118,61 @@ const getQuoteOfToday = async () => {
 }
 
 
+// const registerNewUser = async (user) => {
+//   // Get the user data from the user object
+//   const userData = {
+//     uid:user.uid,
+//     firstName: user.displayName,
+//     email: user.email,
+//     photoURL:user.photoURL,
+//     phoneNumber:user.phoneNumber
+//   };
+
+//   // Register the new user in firestore
+//   await firestore()
+//     .collection('users')
+//     .doc(user.uid)
+//     .set(userData)
+//     .then(() => {
+//       console.log('User added!');
+//     });
+//    messaging().getToken().then(token=>{
+//     uploadDeviceFCMToken(user.uid,token);
+//     })
+// }
+
 const registerNewUser = async (user) => {
-  // Get the user data from the user object
-  const userData = {
-    uid:user.uid,
-    firstName: user.displayName,
-    email: user.email,
-    photoURL:user.photoURL,
-    phoneNumber:user.phoneNumber
-  };
+  const uid = user.uid;
 
-  // Register the new user in firestore
-  await firestore()
-    .collection('users')
-    .doc(user.uid)
-    .set(userData)
-    .then(() => {
-      console.log('User added!');
-    });
-   messaging().getToken().then(token=>{
-    uploadDeviceFCMToken(user.uid,token);
-    })
-}
+  // Check if the user exists in the 'users' collection
+  const userDoc = await firestore().collection('users').doc(uid).get();
 
+  if (userDoc.exists) {
+    // User exists, check if the token is unique
+    const token = await messaging().getToken();
+    const existingTokens = userDoc.data().fcm_tokens || [];
+
+    if (!existingTokens.includes(token)) {
+      // Append the unique token to the 'fcm_tokens' array
+      await firestore().collection('users').doc(uid).update({
+        fcm_tokens: firestore.FieldValue.arrayUnion(token),
+      });
+    }
+  } else {
+    // User doesn't exist, create a new user document
+    const userData = {
+      uid,
+      firstName: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+      phoneNumber: user.phoneNumber,
+      fcm_tokens: [await messaging().getToken()], // Initialize with the current token
+    };
+
+    await firestore().collection('users').doc(uid).set(userData);
+    console.log('New user added!');
+  }
+};
 
 
 const uploadDeviceFCMToken = async(uid,token)=>{
@@ -153,10 +186,51 @@ const uploadDeviceFCMToken = async(uid,token)=>{
 
 }
 
+function subscribeToNotifications(callback, errorCallback) {
+  // return onSnapshot(
+  //   collection(db, "notifications"),
+  //   (snapshot) => {
+  //     const newNotifications = snapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     callback(newNotifications);
+  //   },
+  //   errorCallback
+  // );
+  return firestore().collection('notifications').onSnapshot((snapshot)=>{
+const newNotifications = snapshot.docs.map((doc)=>({
+  id:doc.id,
+  ...doc.data()
+}));
+callback(newNotifications);
+  }, errorCallback);
+
+}
 
 
 
 
+async function listWallpapers() {
+  try {
+    const reference = storage().ref('wallpapers');
+    const listResult = await reference.listAll();
+
+    const wallpaperUrls = listResult.items.map(item => {
+      // Get the download URL for each wallpaper
+      return item.getDownloadURL();
+    });
+
+    // Wait for all promises to resolve
+    const urls = await Promise.all(wallpaperUrls);
+    return urls;
+  } catch (error) {
+    console.error('Error listing wallpapers:', error);
+    return []; // Return an empty array in case of an error
+  }
+}
 
 
-export { checkPlayServices, signInWithGoogle, signInWithPhoneNumber, signOut ,addNewTask, getQuoteOfToday,uploadDeviceFCMToken,registerNewUser};
+
+
+export { checkPlayServices, signInWithGoogle, signInWithPhoneNumber, signOut ,addNewTask, getQuoteOfToday,uploadDeviceFCMToken,registerNewUser,subscribeToNotifications,listWallpapers};

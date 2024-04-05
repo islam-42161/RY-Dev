@@ -14,6 +14,7 @@ import AllGroups from './src/screens/Groups/AllGroups';
 import TaskBoard from './src/screens/TaskBoard';
 import RYFeeds from './src/screens/RYFeeds';
 import Coach from './src/screens/Coach';
+import Wallpapers from './src/screens/Wallpapers';
 
 
 // const Stack = createNativeStackNavigator();
@@ -30,6 +31,7 @@ const theme = useTheme()
     <Screen name='home' component={Home}/>
     <Screen name='activities' component={Activities}/>
     <Screen name='taskboard' component={TaskBoard}/>
+    <Screen name='wallpapers' component={Wallpapers}/>
     
     {/* courses */}
     <Screen name='mycourses' component={MyCourses}/>

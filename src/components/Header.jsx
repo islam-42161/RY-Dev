@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         paddingTop:STATUSBAR_HEIGHT*1.25,
         paddingHorizontal:20,
-        marginBottom:STATUSBAR_HEIGHT*0.25,
+        // marginBottom:STATUSBAR_HEIGHT*0.25,
         paddingBottom:STATUSBAR_HEIGHT*0.25,
         flexDirection: "row",
         gap: 10,
