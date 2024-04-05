@@ -1,4 +1,4 @@
-import { Dimensions, ScrollView, StyleSheet, View, FlatList, Pressable } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View, FlatList, Pressable, Share } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { listWallpapers } from '../../firebase/firebaseConfig';
 import { Image } from 'expo-image';
@@ -101,6 +101,21 @@ const Wallpapers = ({ navigation, route }) => {
     };
     fetchWallpapers();
   }, []);
+  
+
+  const handleSharePress = async () => {
+    try {
+      const currentIndex = Math.floor(scrollX.value / containerWidth);
+      const currentWallpaper = wallpapers[currentIndex];
+
+      await Share.share({
+        message: `Check out this cool wallpaper: ${currentWallpaper}`,
+        url: currentWallpaper,
+      });
+    } catch (error) {
+      console.error('Error sharing image:', error);
+    }
+  };
 
   const renderThumbnail = ({ item }) => (
     <Image source={{ uri: item }} style={styles.thumbnail} />
@@ -130,18 +145,46 @@ const Wallpapers = ({ navigation, route }) => {
               console.log('pressed download button');
             }}
           /> */}
-          <FAB
-    icon="download"
-    style={{
+          <View style={{
         position: 'absolute',
     // margin: 16,
     right: '1%',
     bottom: '-4%',
     zIndex:10,
-    backgroundColor: theme.colors.tertiary,
-    }}
-    onPress={() => console.log('Pressed')}
+    gap:10,
+    flexDirection:'row',
+    alignItems:'center'
+    }}>
+          <FAB
+    icon="download"
+    style={{backgroundColor:theme.colors.tertiary}}
+    onPress={()=>console.log("Pressed download button!")}
   />
+          <FAB
+    icon="share"
+    style={{backgroundColor:theme.colors.tertiary}}
+    onPress={handleSharePress}
+  />
+  {/* <IconButton
+            icon={'share'}
+            style={{
+              backgroundColor: theme.colors.tertiary,
+            }}
+            iconColor={theme.colors.onTertiary}
+            onPress={handleSharePress}
+          />
+  <IconButton
+            icon={'download'}
+            style={{
+              backgroundColor: theme.colors.tertiary,
+            }}
+            iconColor={theme.colors.onTertiary}
+            onPress={() => {
+              console.log('Pressed download button!');
+            }}
+          /> */}
+          </View>
+    
           <View style={styles.scrollViewContent}>
             <Animated.ScrollView
             ref={scrollViewRef}
