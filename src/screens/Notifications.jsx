@@ -4,6 +4,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { IconButton, useTheme,Colors, MD3Colors } from "react-native-paper";
@@ -15,8 +16,9 @@ import {
 import MainContainer from "./MainContainer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { subscribeToNotifications } from "../../firebase/firebaseConfig";
+import RenderHTML from "react-native-render-html";
 
-
+const {width} = Dimensions.get('window')
 const saveNotifications = async (value) => {
   try {
     const jsonValue = JSON.stringify(value);
@@ -85,8 +87,12 @@ const Notifications = ({ navigation, route }) => {
             /> */}
             {/* <IconButton icon={'close'} mode="contained" size={theme.fonts.bodyMedium.fontSize}/> */}
           </View>
-          {/* <View style={{height:StyleSheet.hairlineWidth,backgroundColor:'black'}}/> */}
-          <Text style={[theme.fonts.bodyMedium]}>{item.body}</Text>
+          {/* <Text style={[theme.fonts.bodyMedium]}>{item.body}</Text> */}
+          <View><RenderHTML
+      contentWidth={width}
+      source={{html:`${item.body}`}}
+    />
+    </View>
         </AnimatedNotificationItem>
       </Swipeable>
     );
@@ -106,13 +112,13 @@ const Notifications = ({ navigation, route }) => {
     return () => unsubscribe();
   }, []);
 
-    useEffect(() => {
-    saveNotifications(notifications).then(() => {
-      console.log('Notifications saved to AsyncStorage.');
-    }).catch((error) => {
-      console.error('Failed to save notifications:', error);
-    });
-  }, [notifications]); // This will trigger the effect whenever 'notifications' changes
+  //   useEffect(() => {
+  //   saveNotifications(notifications).then(() => {
+  //     console.log('Notifications saved to AsyncStorage.');
+  //   }).catch((error) => {
+  //     console.error('Failed to save notifications:', error);
+  //   });
+  // }, [notifications]); // This will trigger the effect whenever 'notifications' changes
 
   return (
 <MainContainer title={"Notifications"} titleBadge={notifications.length} navigation={navigation}>
@@ -128,7 +134,7 @@ const Notifications = ({ navigation, route }) => {
             <SwipeableRow index={index} item={item} />
           )}
           keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={()=><View style={{height:StyleSheet.hairlineWidth,backgroundColor:'black',marginVertical:10}}/>}
+          // ItemSeparatorComponent={()=><View style={{height:StyleSheet.hairlineWidth,backgroundColor:'black',marginVertical:10}}/>}
         />
       </View>
     </MainContainer>
@@ -149,10 +155,9 @@ const styles = StyleSheet.create({
   notification_item: {
     // padding: 10,
     // borderRadius: 10,
-    // borderWidth: StyleSheet.hairlineWidth,
-    gap: 5,
-    // paddingVertical:10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    // gap: 5,
+    paddingVertical:10,
     paddingHorizontal: 20,
-    // paddingHorizontal:20,paddingVertical:10,
   },
 });

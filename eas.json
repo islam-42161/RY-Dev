@@ -7,6 +7,11 @@
         "buildType": "apk"
       }
     },
+    "preview":{
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "production": {}
   }
 }
