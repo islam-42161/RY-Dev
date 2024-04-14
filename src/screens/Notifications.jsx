@@ -121,7 +121,7 @@ const Notifications = ({ navigation, route }) => {
   // }, [notifications]); // This will trigger the effect whenever 'notifications' changes
 
   return (
-<MainContainer title={"Notifications"} titleBadge={notifications.length} navigation={navigation}>
+<MainContainer title={"Notifications"} navigation={navigation}>
       <View style={[styles.container,
       { 
         // backgroundColor: theme.colors.background 

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Home from './src/screens/Home';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Notifications from './src/screens/Notifications';
-import { useTheme } from 'react-native-paper';
+import { BottomNavigation, useTheme } from 'react-native-paper';
 import RYDrawer from './src/components/RYDrawer';
 
 import Activities from './src/screens/Activities';
@@ -15,16 +15,16 @@ import TaskBoard from './src/screens/TaskBoard';
 import RYFeeds from './src/screens/RYFeeds';
 import Coach from './src/screens/Coach';
 import Wallpapers from './src/screens/Wallpapers';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { AuthContext } from './AuthProvider';
 
 
 // const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
-const Navigator = Drawer.Navigator;
+const DrawerNavigator = Drawer.Navigator;
 const Screen = Drawer.Screen;
-const SignedInStack = () => {
-const theme = useTheme()
-  return (
-<Navigator initialRouteName='home' drawerContent={props=><RYDrawer {...props}/>} screenOptions={{
+const DrawerNavigation = ()=>(
+<DrawerNavigator initialRouteName='home' drawerContent={props=><RYDrawer {...props}/>} screenOptions={{
     header:()=>null,
     drawerType:'slide'
 }}>
@@ -44,8 +44,38 @@ const theme = useTheme()
     <Screen name='coach' component={Coach}/>
     <Screen name='notifications' component={Notifications}/>
 
-</Navigator>
+</DrawerNavigator>
+)
+
+
+const SignedInStack = () => {
+  const { notifications } = useContext(AuthContext);
+
+  const theme = useTheme()
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
+    { key: 'wallpapers', title: 'Wallpapers', focusedIcon: 'image' },
+    { key: 'notifications', title: 'Notifications', focusedIcon: 'bell', unfocusedIcon: 'bell-outline' ,badge:notifications.length},
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    home: Home,
+    wallpapers: Wallpapers,
+    notifications: Notifications,
+  });
+  return (
+    <GestureHandlerRootView style={{flex:1}}>
+      <BottomNavigation
+      barStyle={{backgroundColor:theme.colors.surfaceVariant}}
+  navigationState={{ index, routes }}
+  onIndexChange={setIndex}
+  renderScene={renderScene}
+/>
+</GestureHandlerRootView>
+    
   )
+  
 }
 
 export default SignedInStack

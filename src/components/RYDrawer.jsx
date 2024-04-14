@@ -41,7 +41,7 @@ const RYDrawer = (props) => {
 <Pressable onPress={showModal} style={{padding:2,height:50,width:50,borderRadius:25,backgroundColor:'white'}}>
 <Avatar.Image size={46} source={{uri:profile.photoURL}}/>
 </Pressable>
-            <Ionicons name="ios-moon" size={25} color="white" />
+            <Ionicons name="moon" size={25} color="white" />
 </View>
 
         <Pressable onPress={showModal} style={{gap:5,paddingHorizontal:20,paddingVertical:15}}>
