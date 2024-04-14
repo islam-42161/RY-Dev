@@ -68,7 +68,6 @@ const AppRoot = () => {
   const [user, setUser] = useState();
   const [notifications, setNotifications] = useState([
   ]);
-  const [notificationsBadge, setNotificationsBadge] = useState(0);
   const [profileModalVisible, setProfileModalVisible] = useState(false);
   function onAuthStateChanged(user) {
     setUser(user);
@@ -85,8 +84,6 @@ const AppRoot = () => {
     <AuthProvider
       notifications={notifications}
       setNotifications={setNotifications}
-      notificationsBadge={notificationsBadge}
-      setNotificationsBadge={setNotificationsBadge}
       user={user}
       setUser={setUser}
       profileModalVisible={profileModalVisible}

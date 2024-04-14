@@ -34,7 +34,7 @@ const saveNotifications = async (value) => {
 const AnimatedNotificationItem = Animated.createAnimatedComponent(TouchableOpacity);
 
 const Notifications = ({ navigation, route }) => {
-  const { notifications, setNotifications,setNotificationsBadge } = useContext(AuthContext);
+  const { notifications, setNotifications} = useContext(AuthContext);
   const theme = useTheme();
 
 
@@ -99,7 +99,6 @@ const Notifications = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    setNotificationsBadge(0);
     const unsubscribe = subscribeToNotifications(
       (newNotifications) => {
         setNotifications(newNotifications);

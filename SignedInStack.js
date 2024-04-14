@@ -49,14 +49,13 @@ const DrawerNavigation = ()=>(
 
 
 const SignedInStack = () => {
-  const { notificationsBadge } = useContext(AuthContext);
 
   const theme = useTheme()
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
     { key: 'wallpapers', title: 'Wallpapers', focusedIcon: 'image' },
-    { key: 'notifications', title: 'Notifications', focusedIcon: 'bell', unfocusedIcon: 'bell-outline' ,badge:notificationsBadge},
+    { key: 'notifications', title: 'Notifications', focusedIcon: 'bell', unfocusedIcon: 'bell-outline'},
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
