@@ -22,13 +22,6 @@ const AppRoot = () => {
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
     );
   };
-  useEffect(()=>{
-    const getAndStoreNotifications = async ()=>{
-      const notifications = await getNotifications();
-      setNotifications(notifications);
-    }
-    getAndStoreNotifications();
-  },[])
 
   useEffect(() => {
     requestPermission();
@@ -44,6 +37,7 @@ const AppRoot = () => {
             "Notification caused to open the app in quit state: ",
             remoteMessage.notification
           );
+          await handleNotification(remoteMessage);
         }
       });
 
@@ -53,11 +47,15 @@ const AppRoot = () => {
         "Notification caused app to open from background state: ",
         remoteMessage.notification
       );
+      await handleNotification(remoteMessage);
+
     });
 
     // register background notification handler
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log("Message handled in the background: ", remoteMessage);
+      await handleNotification(remoteMessage);
+
     });
 
 
@@ -65,35 +63,45 @@ const AppRoot = () => {
     
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log("Notification Arrived: ", JSON.stringify(remoteMessage));
-
-      try {
-        // Retrieve notifications from AsyncStorage
-        const notifications = await getNotifications();
-
-        // Add the new notification to the array
-        const updatedNotifications = [
-          ...notifications,
-          {
-            title: remoteMessage.notification.title,
-            body: remoteMessage.data.notification_body,
-          },
-        ];
-
-        // Store the updated notifications in AsyncStorage
-        await storeNotifications(updatedNotifications);
-
-        // Update the state with the new notifications
-        setNotifications(updatedNotifications);
-      } catch (error) {
-        console.error('Error storing notification:', error);
-      }
+      await handleNotification(remoteMessage);
     });
     return unsubscribe;
 
 
   }, []);
 
-
+  async function handleNotification(remoteMessage) {
+    try {
+      // Retrieve notifications from AsyncStorage
+      const notifications = await getNotifications();
+  
+      // Check if the notification has already been saved
+      const isDuplicate = notifications.some(
+        (notification) => notification.id === remoteMessage.messageId
+      );
+  
+      if (!isDuplicate) {
+        // Add the new notification to the array
+        const updatedNotifications = [
+          ...notifications,
+          {
+            title: remoteMessage.notification.title,
+            body: remoteMessage.data.notification_body,
+            type: remoteMessage.data.type,
+            id: remoteMessage.messageId,
+          },
+        ];
+  
+        // Store the updated notifications in AsyncStorage
+        await storeNotifications(updatedNotifications);
+  
+        // Update the state with the new notifications
+        setNotifications(updatedNotifications);
+      }
+    } catch (error) {
+      console.error('Error storing notification:', error);
+    }
+  }
 
 
   async function getNotifications() {
