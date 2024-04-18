@@ -98,19 +98,19 @@ const Notifications = ({ navigation, route }) => {
     );
   };
 
-  useEffect(() => {
-    const unsubscribe = subscribeToNotifications(
-      (newNotifications) => {
-        setNotifications(newNotifications);
-      },
-      (error) => {
-        console.log("Error: ", error);
-      }
-    );
+  // useEffect(() => {
+  //   const unsubscribe = subscribeToNotifications(
+  //     (newNotifications) => {
+  //       setNotifications(newNotifications);
+  //     },
+  //     (error) => {
+  //       console.log("Error: ", error);
+  //     }
+  //   );
   
-    // Clean up the listener when the component unmounts
-    return () => unsubscribe();
-  }, []);
+  //   // Clean up the listener when the component unmounts
+  //   return () => unsubscribe();
+  // }, []);
 
   //   useEffect(() => {
   //   saveNotifications(notifications).then(() => {
@@ -120,6 +120,7 @@ const Notifications = ({ navigation, route }) => {
   //   });
   // }, [notifications]); // This will trigger the effect whenever 'notifications' changes
 
+  useEffect(()=>{},[notifications])
   return (
 <MainContainer title={"Notifications"} navigation={navigation}>
       <View style={[styles.container,

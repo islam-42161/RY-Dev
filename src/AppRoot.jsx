@@ -5,6 +5,7 @@ import RootNavigator from "../RootNavigator";
 import auth from "@react-native-firebase/auth";
 import messaging from "@react-native-firebase/messaging";
 import { registerNewUser, uploadDeviceFCMToken } from "../firebase/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const AppRoot = () => {
@@ -54,9 +55,32 @@ const AppRoot = () => {
 
 
 
-    const unsubscribe = messaging().onMessage(async (remoteMessage)=>{
-      console.log("Notification Arrived: ",JSON.stringify(remoteMessage));
-    })
+    
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      console.log("Notification Arrived: ", JSON.stringify(remoteMessage));
+
+      try {
+        // Retrieve notifications from AsyncStorage
+        const notifications = await getNotifications();
+
+        // Add the new notification to the array
+        const updatedNotifications = [
+          ...notifications,
+          {
+            title: remoteMessage.notification.title,
+            body: remoteMessage.data.notification_body,
+          },
+        ];
+
+        // Store the updated notifications in AsyncStorage
+        await storeNotifications(updatedNotifications);
+
+        // Update the state with the new notifications
+        setNotifications(updatedNotifications);
+      } catch (error) {
+        console.error('Error storing notification:', error);
+      }
+    });
     return unsubscribe;
 
 
@@ -64,6 +88,24 @@ const AppRoot = () => {
 
 
 
+
+  async function getNotifications() {
+    try {
+      const notificationsString = await AsyncStorage.getItem('notifications');
+      return notificationsString ? JSON.parse(notificationsString) : [];
+    } catch (error) {
+      console.error('Error retrieving notifications:', error);
+      return [];
+    }
+  }
+
+  async function storeNotifications(notifications) {
+    try {
+      await AsyncStorage.setItem('notifications', JSON.stringify(notifications));
+    } catch (error) {
+      console.error('Error storing notifications:', error);
+    }
+  }
 
   const [user, setUser] = useState();
   const [notifications, setNotifications] = useState([
