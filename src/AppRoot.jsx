@@ -22,6 +22,13 @@ const AppRoot = () => {
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
     );
   };
+  useEffect(()=>{
+    const getAndStoreNotifications = async ()=>{
+      const notifications = await getNotifications();
+      setNotifications(notifications);
+    }
+    getAndStoreNotifications();
+  },[])
 
   useEffect(() => {
     requestPermission();
