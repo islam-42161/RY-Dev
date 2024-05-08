@@ -27,7 +27,7 @@ import * as FileSystem from "expo-file-system";
 
 const screenWidth = Dimensions.get("window").width;
 const aspectRatio = 16 / 9; // Corrected aspect ratio for portrait mode
-const containerWidth = screenWidth * 0.7; // 60% of the screen width, as per your code
+const containerWidth = screenWidth * 0.9; // 60% of the screen width, as per your code
 const containerHeight = containerWidth * aspectRatio; // Height based on the aspect ratio
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const Wallpapers = ({ navigation, route }) => {

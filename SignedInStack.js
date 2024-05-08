@@ -17,9 +17,10 @@ import Coach from './src/screens/Coach';
 import Wallpapers from './src/screens/Wallpapers';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthContext } from './AuthProvider';
+import { NavigationContainer } from '@react-navigation/native';
 
 
-// const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const DrawerNavigator = Drawer.Navigator;
 const Screen = Drawer.Screen;
@@ -63,16 +64,27 @@ const SignedInStack = () => {
     wallpapers: Wallpapers,
     notifications: Notifications,
   });
-  return (
-    <GestureHandlerRootView style={{flex:1}}>
-      <BottomNavigation
-      barStyle={{backgroundColor:theme.colors.surfaceVariant}}
-  navigationState={{ index, routes }}
-  onIndexChange={setIndex}
-  renderScene={renderScene}
-/>
-</GestureHandlerRootView>
+
+//   return (
+//     <GestureHandlerRootView style={{flex:1}}>
+//       <BottomNavigation
+//       barStyle={{backgroundColor:theme.colors.surfaceVariant}}
+//   navigationState={{ index, routes }}
+//   onIndexChange={setIndex}
+//   renderScene={renderScene}
+// />
+// </GestureHandlerRootView>
     
+//   )
+  return(
+    <GestureHandlerRootView style={{flex:1}}>
+
+  <Stack.Navigator initialRouteName='home' screenOptions={{header:()=>null}}>
+    <Stack.Screen component={Home} name='home'/>
+    <Stack.Screen component={Notifications} name='notifications'/>
+    <Stack.Screen component={Wallpapers} name='wallpapers'/>
+  </Stack.Navigator>
+  </GestureHandlerRootView>
   )
   
 }
