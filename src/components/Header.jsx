@@ -18,7 +18,7 @@ const Header = ({title,navigation,titleBadge}) => {
     }
   return (
     <View style={[styles.header,{backgroundColor:theme.colors.surfaceVariant}]}>
-    <RYUserProfileModal/>
+    {/* <RYUserProfileModal/> */}
           {/* <MaterialIcons name="drag-handle" size={24} color="black" onPress={()=>navigation.dispatch(DrawerActions.toggleDrawer())}/> */}
           <Text style={theme.fonts.labelLarge}>{titleBadge > 0 ? `${title} • ${titleBadge}` : title}</Text>
           <TouchableOpacity onPress={showModal}>

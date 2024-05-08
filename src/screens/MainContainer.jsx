@@ -2,6 +2,7 @@ import { StatusBar, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Header from "../components/Header";
 import { useTheme } from "react-native-paper";
+import RYUserProfileModal from "../components/RYUserProfileModal";
 
 const MainContainer = ({navigation, route, title,titleBadge, children}) => {
     const theme = useTheme()
@@ -14,6 +15,7 @@ const MainContainer = ({navigation, route, title,titleBadge, children}) => {
       />
       <Header title={title} navigation={navigation} titleBadge={titleBadge}/>
       {children}
+      <RYUserProfileModal/>
     </View>
   );
 };

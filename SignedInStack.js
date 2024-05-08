@@ -17,6 +17,7 @@ import Coach from './src/screens/Coach';
 import Wallpapers from './src/screens/Wallpapers';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthContext } from './AuthProvider';
+import Test from './src/screens/Test';
 
 
 // const Stack = createNativeStackNavigator();
@@ -56,12 +57,14 @@ const SignedInStack = () => {
     { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
     { key: 'wallpapers', title: 'Wallpapers', focusedIcon: 'image' },
     { key: 'notifications', title: 'Notifications', focusedIcon: 'bell', unfocusedIcon: 'bell-outline'},
+    { key: 'test', title: 'Test', focusedIcon: 'ab-testing', unfocusedIcon: 'ab-testing'},
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
     home: Home,
     wallpapers: Wallpapers,
     notifications: Notifications,
+    test:Test
   });
   return (
     <GestureHandlerRootView style={{flex:1}}>

@@ -11,17 +11,18 @@ const AnimatedImage = Animated.createAnimatedComponent(Image);
 const Home = ({route,navigation}) => {
   const theme = useTheme()
   const [quote,setQuote] = useState();
-  useEffect(()=>{
+  const fetchQuote = () => {
     getQuoteOfToday().then(quoteData => {
       console.log(quoteData);
-      
-
       setQuote(quoteData);
     });
-  },[])
+  }
+  useEffect(() => {
+    fetchQuote();
+  }, [])
   return (
     <MainContainer title={"Home"} navigation={navigation}>
-    <View style={{marginHorizontal:20,marginTop:10,paddingTop:10,gap:10,elevation:5,backgroundColor:theme.colors.background,borderRadius:20,overflow:'hidden',alignItems:'center'}}>
+    <View style={{marginHorizontal:20,marginTop:20,paddingTop:10,gap:10,elevation:5,backgroundColor:theme.colors.background,borderRadius:20,overflow:'hidden',alignItems:'center'}}>
       <Text style={[theme.fonts.titleMedium]}>🌞 Daily Dose of Inspiration</Text>
     {quote ?(
       <AnimatedImage
@@ -31,7 +32,7 @@ const Home = ({route,navigation}) => {
         contentFit='cover'
       />
     ):(
-      <Text style={[{opacity:0.5,marginBottom:10},theme.fonts.bodySmall]}>No quote for today</Text>
+      <Text style={[{opacity:0.5,marginBottom:10},theme.fonts.bodySmall]}>No quote for today <Text onPress={fetchQuote} style={{textDecorationLine:'underline'}}>Refresh</Text></Text>
     ) 
       
     }
