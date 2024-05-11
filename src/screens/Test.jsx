@@ -1,46 +1,72 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
-import MainContainer from './MainContainer';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  BottomSheetModalProvider,
+  BottomSheetBackdrop,
+} from '@gorhom/bottom-sheet';
 
-const Test = ({ navigation, route }) => {
-  // refs
-  const bottomSheetRef = useRef(null);
+const Test = () => {
+  // ref
+  const bottomSheetModalRef = useRef(null);
+
+  // state
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // variables
-  const snapPoints = useMemo(() => ['10%', '50%', '90%'], []);
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
 
   // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    console.log('Modal: ',isModalVisible)
+    setIsModalVisible(true);
+  }, []);
+
   const handleSheetChanges = useCallback((index) => {
     console.log('handleSheetChanges', index);
   }, []);
+  const handleDismiss = useCallback(()=>{
+setIsModalVisible(false)
+  },[])
 
-  const handleCloseBottomSheet = useCallback(() => {
-    bottomSheetRef.current?.collapse();
-  }, []);
+  // effect to present the modal when isModalVisible changes to true
+  useEffect(() => {
+    if (isModalVisible) {
+      bottomSheetModalRef.current?.present();
+    }
+  }, [isModalVisible]);
+
+  // effect to dismiss the modal when isModalVisible changes to false
+  useEffect(() => {
+    if (!isModalVisible) {
+      bottomSheetModalRef.current?.dismiss();
+    }
+  }, [isModalVisible]);
 
   // renders
   return (
-    <MainContainer>
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={0}
-        // snapPoints={snapPoints}
-        enableDynamicSizing
-        onChange={handleSheetChanges}
-        enablePanDownToClose
-        backdropComponent={BottomSheetBackdrop}
-        backgroundStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-        handleIndicatorStyle={styles.handleIndicator}
-      >
-        <View style={styles.contentContainer}>
-          <Text>Awesome 🎉</Text>
-          <Pressable onPress={handleCloseBottomSheet}>
-            <Text style={styles.closeButton}>Close</Text>
-          </Pressable>
-        </View>
-      </BottomSheet>
-      </MainContainer>
+    <BottomSheetModalProvider>
+      <View style={styles.container}>
+        <Button
+          onPress={handlePresentModalPress}
+          title="Present Modal"
+          color="black"
+        />
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={isModalVisible ? 0 : -1}
+          snapPoints={snapPoints}
+          onChange={handleSheetChanges}
+          onDismiss={handleDismiss}
+          backdropComponent={BottomSheetBackdrop}
+        >
+          <BottomSheetView style={styles.contentContainer}>
+            <Text>Awesome 🎉</Text>
+          </BottomSheetView>
+        </BottomSheetModal>
+      </View>
+    </BottomSheetModalProvider>
   );
 };
 
@@ -48,24 +74,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: 'grey',
+    justifyContent: 'center',
   },
   contentContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  handleIndicator: {
-    backgroundColor: 'grey',
-    width: 50,
-    height: 5,
-    borderRadius: 5,
-  },
-  closeButton: {
-    marginTop: 20,
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: 'blue',
   },
 });
 

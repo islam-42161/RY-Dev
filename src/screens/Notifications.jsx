@@ -7,7 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useContext, useEffect } from "react";
-import { IconButton, useTheme, Colors, MD3Colors } from "react-native-paper";
+import { IconButton, useTheme, Colors, MD3Colors, Chip } from "react-native-paper";
 import { AuthContext } from "../../AuthProvider";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 import {
@@ -17,6 +17,7 @@ import MainContainer from "./MainContainer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { subscribeToNotifications } from "../../firebase/firebaseConfig";
 import RenderHTML from "react-native-render-html";
+import { AntDesign } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window')
 const saveNotifications = async (value) => {
@@ -46,7 +47,26 @@ const Notifications = ({ navigation, route }) => {
     const renderRightActions = () => (
       <IconButton icon={'delete'} mode="contained" onPress={() => deleteNotification(index)} iconColor={MD3Colors.error60} containerColor={MD3Colors.error90} style={{ alignSelf: 'center', marginEnd: 20 }} />
     );
+    console.log(item)
+    const timestamp = item.sentTime; // Assuming this is in milliseconds
+const date = new Date(timestamp);
 
+const options = {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: true // To display time in 12-hour format
+};
+const sentTime = date.toLocaleDateString('en-US', options);
+
+const iconName =
+  item.type === 'notification'
+    ? 'notification'
+    : item.type === 'quote'
+    ? 'message1'
+    : 'picture';
     return (
       <Swipeable ref={swiperef} renderRightActions={renderRightActions}>
         <AnimatedNotificationItem
@@ -56,34 +76,26 @@ const Notifications = ({ navigation, route }) => {
           style={[
             styles.notification_item,
             {
-              backgroundColor: theme.colors.background
+              backgroundColor: theme.colors.surfaceVariant,
+              
             },
           ]}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: 20,
-            }}
-          >
+          <View style={styles.notification_item_main_body}>
+          <AntDesign name={iconName} style={{fontSize:18,backgroundColor:theme.colors.background,height:36,width:36,textAlign:'center',textAlignVertical:'center',borderRadius:18}} />
+          <View style={{
+            flex:1,
+            gap:4
+            }}>
             <Text
               style={[theme.fonts.titleMedium, { flex: 1 }]}
               numberOfLines={1}
             >
               {item.title}
             </Text>
-            {/* <Ionicons
-              name="close-outline"
-              onPress={() => deleteNotification(index)}
-              size={theme.fonts.titleMedium.fontSize}
-              style={{ margin: 2.5 }}
-            /> */}
-            {/* <IconButton icon={'close'} mode="contained" size={theme.fonts.bodyMedium.fontSize}/> */}
-          </View>
-          {/* <Text style={[theme.fonts.bodyMedium]}>{item.body}</Text> */}
-          <View><RenderHTML
+
+          <View>
+            <RenderHTML
             contentWidth={width}
             source={{ html: `${item.body}` }}
             tagsStyles={{
@@ -93,6 +105,14 @@ const Notifications = ({ navigation, route }) => {
               }
             }}
           />
+          </View>
+
+<View style={styles.chips}>
+<Text style={{paddingHorizontal:8,paddingVertical:4,borderWidth:StyleSheet.hairlineWidth,borderRadius:12,...theme.fonts.labelSmall}} adjustsFontSizeToFit>{sentTime}</Text>
+{/* <Text style={{paddingHorizontal:8,paddingVertical:4,borderWidth:StyleSheet.hairlineWidth,borderRadius:12,...theme.fonts.labelSmall}} adjustsFontSizeToFit>{item.type.toUpperCase()}</Text> */}
+{/* <Text style={{paddingHorizontal:8,paddingVertical:4,borderWidth:StyleSheet.hairlineWidth,borderRadius:12,...theme.fonts.labelSmall,flex:1}} adjustsFontSizeToFit>{item.type.toUpperCase()}</Text> */}
+</View>
+          </View>
           </View>
         </AnimatedNotificationItem>
       </Swipeable>
@@ -189,16 +209,29 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   notifications: {
-    // gap: 20,
-    // marginHorizontal: 20,
+    gap: 20,
+    paddingTop:20,
     paddingBottom: "10%",
   },
-  notification_item: {
+  notification_item_main_body: {
     // padding: 10,
-    // borderRadius: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    // gap: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    // borderBottomWidth: StyleSheet.hairlineWidth,
+    gap: 20,
+    // margin:10,
+    flexDirection:'row'
+    
   },
+  notification_item:{
+    borderRadius: 10,
+    padding:10,
+    marginHorizontal:20,
+    gap:10
+  },
+  chips:{
+    flexDirection:'row',
+    alignItems:'center',
+    gap:4,
+    marginTop:4,
+    flex:1
+  }
 });

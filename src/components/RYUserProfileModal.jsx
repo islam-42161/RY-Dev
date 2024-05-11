@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Avatar, MD3Colors, useTheme } from 'react-native-paper';
 import { AuthContext } from '../../AuthProvider';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { signOut } from '../../firebase/firebaseConfig';
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { AntDesign } from '@expo/vector-icons';
 
 const RYUserProfileModal = () => {
   const { profileModalVisible, setProfileModalVisible, user } = useContext(AuthContext);
@@ -12,84 +12,111 @@ const RYUserProfileModal = () => {
   const theme = useTheme();
   const bottomSheetRef = React.useRef(null);
 
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const snapPoints = useMemo(() => ['1%'], []);
 
   const handleSheetChanges = useCallback((index) => {
     console.log('handleSheetChanges', index);
   }, []);
 
-  const onClose = useCallback(() => {
-    console.log('Bottom Sheet closed');
-    hideModal();
-  }, [hideModal]);
+  const handleDismiss = useCallback(()=>{
+    hideModal()
+      },[])
 
-  const onCollapse = useCallback(() => {
-    console.log('Bottom Sheet collapsed');
-    hideModal();
-  }, [hideModal]);
+// useEffect(()=>{
+//   bottomSheetRef.current?.close();
+// },[])
+  useEffect(() => {
+    if (profileModalVisible) {
+      bottomSheetRef.current?.present();
+    }
+    else{
+      bottomSheetRef.current?.dismiss();
+    }
+  }, [profileModalVisible]);
+
 
   return (
-    <BottomSheet
+    <BottomSheetModal
     ref={bottomSheetRef}
     index={profileModalVisible ? 1 : -1}
+    snapPoints={snapPoints}
     enableDynamicSizing
-    snapPoints={["30%"]}
     onChange={handleSheetChanges}
-    enablePanDownToClose
-    backdropComponent={BottomSheetBackdrop}
+    onDismiss={handleDismiss}
     handleComponent={()=>null}
-    onClose={onClose}
-    onCollapse={onCollapse}
-    backgroundStyle={{backgroundColor:theme.colors.background,borderRadius:18}}
+    backdropComponent={BottomSheetBackdrop}
+
+      backgroundStyle={{ backgroundColor: theme.colors.background, borderRadius: 18 }}
+      // backgroundStyle={{ backgroundColor: theme.colors.error, borderRadius: 18 }}
     >
-      <BottomSheetView style={[styles.containerStyle]}>
+      <BottomSheetView style={styles.containerStyle}>
         <Pressable style={styles.profileRow}>
-          <View>
-            <Text style={theme.fonts.bodyLarge}>{user.displayName}</Text>
-            <Text style={[theme.fonts.bodySmall, { opacity: 0.5 }]}>{user.email}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 }}>
+            <Avatar.Image size={46} source={{ uri: user.photoURL }} />
+            <View>
+              <Text style={theme.fonts.titleMedium} numberOfLines={1}>
+                {user.displayName}
+              </Text>
+              <Text style={[theme.fonts.bodyMedium, { opacity: 0.5 }]} numberOfLines={1}>
+                {user.email}
+              </Text>
+            </View>
           </View>
-          <Avatar.Image size={46} source={{ uri: user.photoURL }} />
+          <TouchableOpacity
+            onPress={() => {
+              hideModal();
+              signOut();
+            }}
+            style={{
+              height: theme.fonts.bodyLarge.fontSize * 2,
+              width: theme.fonts.bodyLarge.fontSize * 2,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: theme.colors.error,
+              borderRadius: 30,
+            }}
+          >
+            <AntDesign name="logout" size={theme.fonts.bodyLarge.fontSize} color={theme.colors.onError} />
+          </TouchableOpacity>
         </Pressable>
-        <View style={styles.extra1}>
-          <TouchableOpacity style={{ flexDirection: 'row', gap: 20, padding: 10, alignItems: 'center',backgroundColor:'white' }}>
-            <MaterialCommunityIcons name="account-circle-outline" size={theme.fonts.bodyLarge.fontSize * 1.5} color="black" />
+        {/* <View style={styles.extra1}>
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              gap: 20,
+              padding: 20,
+              alignItems: 'center',
+              backgroundColor: theme.colors.onPrimaryContainer,
+            }}
+          >
+            <AntDesign name="profile" size={theme.fonts.bodyLarge.fontSize * 1.5} color="black" />
             <Text style={theme.fonts.bodyLarge}>My Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ flexDirection: 'row', gap: 20, padding: 10, alignItems: 'center',backgroundColor:'white' }}>
-            <MaterialCommunityIcons name="target" size={theme.fonts.bodyLarge.fontSize * 1.5} color="black" />
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              gap: 20,
+              padding: 20,
+              alignItems: 'center',
+              backgroundColor: theme.colors.onPrimaryContainer,
+            }}
+          >
+            <AntDesign name="checkcircleo" size={theme.fonts.bodyLarge.fontSize * 1.5} color="black" />
             <Text style={theme.fonts.bodyLarge}>My Goals</Text>
           </TouchableOpacity>
-        </View>
-        {user.password && (
-          <TouchableOpacity style={{ flexDirection: 'row', gap: 20, paddingHorizontal: 20, paddingVertical: 10, alignItems: 'center' }}>
-            <MaterialCommunityIcons name="form-textbox-password" size={theme.fonts.bodyLarge.fontSize * 1.5} color="black" />
-            <Text style={theme.fonts.bodyLarge}>Change Password</Text>
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          onPress={() => {
-            hideModal();
-            signOut();
-          }}
-          style={{ flexDirection: 'row', gap: 20, paddingHorizontal: 20, paddingVertical: 10, alignItems: 'center', marginBottom: 20 }}
-        >
-          <MaterialCommunityIcons name="logout" size={theme.fonts.bodyLarge.fontSize * 1.5} color={MD3Colors.error60} />
-          <Text style={[theme.fonts.bodyLarge, { color: MD3Colors.error60 }]}>Logout</Text>
-        </TouchableOpacity>
+        </View> */}
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 };
 
 export default RYUserProfileModal;
 
 const styles = StyleSheet.create({
-  containerStyle: {
-  },
+  containerStyle: {},
   profileRow: {
     gap: 10,
     alignItems: 'center',
-    justifyContent: 'space-between',
     flexDirection: 'row',
     padding: 15,
   },
@@ -98,6 +125,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 15,
     overflow: 'hidden',
-    gap:2
+    gap: 2,
   },
 });

@@ -89,6 +89,7 @@ const AppRoot = () => {
             body: remoteMessage.data.notification_body,
             type: remoteMessage.data.type,
             id: remoteMessage.messageId,
+            sentTime:remoteMessage.sentTime
           },
         ];
   

@@ -3,10 +3,12 @@ import React from "react";
 import Header from "../components/Header";
 import { useTheme } from "react-native-paper";
 import RYUserProfileModal from "../components/RYUserProfileModal";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const MainContainer = ({navigation, route, title,titleBadge, children}) => {
     const theme = useTheme()
   return (
+    <BottomSheetModalProvider>
     <View style={[styles.root,{backgroundColor:theme.colors.background}]}>
     <StatusBar
         translucent
@@ -17,6 +19,7 @@ const MainContainer = ({navigation, route, title,titleBadge, children}) => {
       {children}
       <RYUserProfileModal/>
     </View>
+    </BottomSheetModalProvider>
   );
 };
 
